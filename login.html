@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <link rel="stylesheet" href="style.css">
   <script src="auth.js"></script>
@@ -10,6 +12,15 @@
 
 <header>
   <h2>Remote Work Hub PH</h2>
+
+  <!-- UNIVERSAL NAV -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="post-job.html">Post Job</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign Up</a>
+  </nav>
 </header>
 
 <section class="jobs">
@@ -18,12 +29,12 @@
 
   <div class="job-card">
 
-    <input id="email" placeholder="Email" style="width:100%; padding:10px;">
-    <input id="password" type="password" placeholder="Password" style="width:100%; padding:10px;">
+    <input id="email" placeholder="Email" style="width:100%; padding:10px; margin:5px 0;">
+    <input id="password" type="password" placeholder="Password" style="width:100%; padding:10px; margin:5px 0;">
 
     <button class="btn" onclick="login()">Login</button>
 
-    <p>No account? <a href="signup.html">Sign up</a></p>
+    <p>No account? <a href="signup.html">Create one</a></p>
 
   </div>
 
