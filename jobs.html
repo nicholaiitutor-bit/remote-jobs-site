@@ -1,43 +1,89 @@
-<section class="jobs">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobs - Remote Work Hub PH</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-  <h1>Find Remote Jobs</h1>
-  <p>Browse opportunities from global employers</p>
+<body>
 
-  <div id="jobList"></div>
+<header>
+  <h2>Remote Work Hub PH</h2>
 
-</section>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="post-job.html">Post Job</a>
+    <a href="login.html">Login</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h3>Search</h3>
+    <input type="text" placeholder="Search jobs..." onkeyup="filterJobs()">
+
+    <h3>Category</h3>
+    <select>
+      <option>All</option>
+      <option>Virtual Assistant</option>
+      <option>Design</option>
+      <option>Marketing</option>
+      <option>Development</option>
+    </select>
+
+    <h3>Type</h3>
+    <select>
+      <option>All</option>
+      <option>Full-time</option>
+      <option>Part-time</option>
+      <option>Freelance</option>
+    </select>
+  </div>
+
+  <!-- JOB LIST -->
+  <div class="job-list" id="jobList">
+
+    <div class="job-item">
+      <h3>Virtual Assistant</h3>
+      <div class="job-meta">Full-time • $3 - $6/hr • Remote</div>
+      <a href="apply.html" class="btn">Apply</a>
+    </div>
+
+    <div class="job-item">
+      <h3>Graphic Designer</h3>
+      <div class="job-meta">Freelance • $150/project • Remote</div>
+      <a href="apply.html" class="btn">Apply</a>
+    </div>
+
+    <div class="job-item">
+      <h3>Social Media Manager</h3>
+      <div class="job-meta">Part-time • $400/month • Remote</div>
+      <a href="apply.html" class="btn">Apply</a>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Remote Work Hub PH
+</footer>
 
 <script>
-function loadJobs() {
-  let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+function filterJobs() {
+  let input = document.querySelector(".sidebar input").value.toLowerCase();
+  let jobs = document.querySelectorAll(".job-item");
 
-  let container = document.getElementById("jobList");
-
-  let defaultJobs = `
-    <div class="job-card">
-      <h3>Virtual Assistant</h3>
-      <p>$3 - $6/hr</p>
-      <a href="apply.html" class="btn">Apply Now</a>
-    </div>
-
-    <div class="job-card">
-      <h3>Graphic Designer</h3>
-      <p>$150/project</p>
-      <a href="apply.html" class="btn">Apply Now</a>
-    </div>
-  `;
-
-  let userJobs = jobs.map(job => `
-    <div class="job-card">
-      <h3>${job.title}</h3>
-      <p>${job.rate} | ${job.type}</p>
-      <p>${job.desc}</p>
-      <a href="apply.html" class="btn">Apply Now</a>
-    </div>
-  `).join("");
-
-  container.innerHTML = defaultJobs + userJobs;
+  jobs.forEach(job => {
+    job.style.display = job.innerText.toLowerCase().includes(input) ? "block" : "none";
+  });
 }
-
-loadJobs();
 </script>
+
+</body>
+</html>
