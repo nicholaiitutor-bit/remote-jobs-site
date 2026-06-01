@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Job - Remote Work Hub PH</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h2>Remote Work Hub PH</h2>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="post-job.html">Post Job</a>
+    <a href="apply.html">Apply</a>
+  </nav>
+</header>
+
+<section class="jobs">
+
+  <h1>Employer Job Posting</h1>
+  <p>Post a remote job and reach global freelancers</p>
+
+  <div class="job-card">
+
+    <input id="title" placeholder="Job Title" style="width:100%; padding:10px; margin:5px 0;">
+    <input id="rate" placeholder="Salary / Rate" style="width:100%; padding:10px; margin:5px 0;">
+    <input id="type" placeholder="Job Type (Full-time, Freelance)" style="width:100%; padding:10px; margin:5px 0;">
+    <textarea id="desc" placeholder="Job Description" style="width:100%; padding:10px; margin:5px 0;"></textarea>
+
+    <button class="btn" onclick="postJob()">Post Job</button>
+
+  </div>
+
+</section>
+
+<script>
+function postJob() {
+  let job = {
+    title: document.getElementById("title").value,
+    rate: document.getElementById("rate").value,
+    type: document.getElementById("type").value,
+    desc: document.getElementById("desc").value
+  };
+
+  let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  jobs.push(job);
+  localStorage.setItem("jobs", JSON.stringify(jobs));
+
+  alert("Job posted successfully!");
+  window.location.href = "jobs.html";
+}
+</script>
+
+</body>
+</html>
