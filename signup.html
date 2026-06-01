@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up</title>
   <link rel="stylesheet" href="style.css">
   <script src="auth.js"></script>
@@ -10,6 +12,15 @@
 
 <header>
   <h2>Remote Work Hub PH</h2>
+
+  <!-- UNIVERSAL NAV -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="post-job.html">Post Job</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign Up</a>
+  </nav>
 </header>
 
 <section class="jobs">
@@ -18,18 +29,18 @@
 
   <div class="job-card">
 
-    <input id="name" placeholder="Full Name" style="width:100%; padding:10px;">
-    <input id="email" placeholder="Email" style="width:100%; padding:10px;">
-    <input id="password" type="password" placeholder="Password" style="width:100%; padding:10px;">
+    <input id="name" placeholder="Full Name" style="width:100%; padding:10px; margin:5px 0;">
+    <input id="email" placeholder="Email" style="width:100%; padding:10px; margin:5px 0;">
+    <input id="password" type="password" placeholder="Password" style="width:100%; padding:10px; margin:5px 0;">
 
-    <select id="role" style="width:100%; padding:10px;">
+    <select id="role" style="width:100%; padding:10px; margin:5px 0;">
       <option value="freelancer">Freelancer</option>
       <option value="employer">Employer</option>
     </select>
 
     <button class="btn" onclick="signup()">Sign Up</button>
 
-    <p>Already have an account? <a href="login.html">Login</a></p>
+    <p>Already have an account? <a href="login.html">Login here</a></p>
 
   </div>
 
