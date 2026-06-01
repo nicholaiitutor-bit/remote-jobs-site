@@ -1,50 +1,41 @@
-function signup() {
-  let name = document.getElementById("name").value;
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
-  let role = document.getElementById("role").value;
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+/* 🔥 YOUR FIREBASE CONFIG */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-  // prevent duplicate emails
-  let exists = users.find(u => u.email === email);
-  if (exists) {
-    alert("Email already exists!");
-    return;
-  }
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 
-  users.push({ name, email, password, role });
-  localStorage.setItem("users", JSON.stringify(users));
-
-  alert("Account created successfully!");
-  window.location.href = "login.html";
+/* SIGN UP */
+export async function signup(email, password) {
+  return await createUserWithEmailAndPassword(auth, email, password);
 }
 
-function login() {
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
-
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-
-  let user = users.find(u => u.email === email && u.password === password);
-
-  if (!user) {
-    alert("Invalid email or password!");
-    return;
-  }
-
-  localStorage.setItem("loggedInUser", JSON.stringify(user));
-
-  alert("Welcome " + user.name);
-  window.location.href = "index.html";
+/* LOGIN */
+export async function login(email, password) {
+  return await signInWithEmailAndPassword(auth, email, password);
 }
 
-function logout() {
-  localStorage.removeItem("loggedInUser");
-  alert("Logged out successfully!");
-  window.location.href = "index.html";
+/* LOGOUT */
+export function logout() {
+  return signOut(auth);
 }
 
-function getUser() {
-  return JSON.parse(localStorage.getItem("loggedInUser"));
+/* CHECK USER */
+export function onUserChanged(callback) {
+  return onAuthStateChanged(auth, callback);
 }
