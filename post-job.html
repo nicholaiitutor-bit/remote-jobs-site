@@ -13,12 +13,12 @@
   <h2>Remote Work Hub PH</h2>
 
   <nav>
-  <a href="index.html">Home</a>
-  <a href="jobs.html">Jobs</a>
-  <a href="post-job.html">Post Job</a>
-  <a href="login.html">Login</a>
-  <a href="employer-dashboard.html">Dashboard</a>
-</nav>
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="post-job.html">Post Job</a>
+    <a href="employer-dashboard.html">Dashboard</a>
+    <a href="login.html">Login</a>
+  </nav>
 </header>
 
 <section class="jobs">
@@ -44,12 +44,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* Firebase config */
+/* 🔥 FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyAs5VqodQCgH-F-VYbM1zS2BzsoHOQGpzo",
   authDomain: "remote-work-hub-211d8.firebaseapp.com",
   projectId: "remote-work-hub-211d8",
-  storageBucket: "remote-work-hub-211d8.firebasestorage.app",
+  storageBucket: "remote-work-hub-211d8.appspot.com",
   messagingSenderId: "697750475671",
   appId: "1:697750475671:web:6e609411ae003e6500aad2"
 };
@@ -65,41 +65,12 @@ if (!user) {
   window.location.href = "login.html";
 }
 
-/* POST JOB */
-window.postJob = async function () {
-
-  if (user.role !== "employer") {
-    alert("Only employers can post jobs!");
-    return;
-  }
-
-  let title = document.getElementById("title").value;
-  let rate = document.getElementById("rate").value;
-  let type = document.getElementById("type").value;
-  let desc = document.getElementById("desc").value;
-
-  if (!title || !rate || !type || !desc) {
-    alert("Please fill all fields!");
-    return;
-  }
-
-  await addDoc(collection(db, "jobs"), {
-    title,
-    rate,
-    type,
-    desc,
-    createdAt: new Date(),
-    createdBy: user.name
-  });
-
-  alert("Job posted successfully!");
+if (user.role !== "employer") {
+  alert("Only employers can post jobs!");
   window.location.href = "jobs.html";
-};
-</script>
+}
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
+/* POST JOB */
 window.postJob = async function () {
 
   let title = document.getElementById("title").value;
@@ -114,14 +85,15 @@ window.postJob = async function () {
 
   try {
     await addDoc(collection(db, "jobs"), {
-      title: title,
-      rate: rate,
-      type: type,
-      desc: desc,
-      createdAt: new Date()
+      title,
+      rate,
+      type,
+      desc,
+      createdAt: new Date(),
+      createdBy: user.name
     });
 
-    alert("Job posted successfully to Firebase!");
+    alert("Job posted successfully!");
     window.location.href = "jobs.html";
 
   } catch (error) {
