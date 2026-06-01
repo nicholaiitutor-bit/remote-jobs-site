@@ -49,12 +49,12 @@ import { getFirestore, collection, getDocs } from "https://www.gstatic.com/fireb
 
 /* 🔥 PASTE YOUR FIREBASE CONFIG HERE */
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAs5VqodQCgH-F-VYbM1zS2BzsoHOQGpzo",
+  authDomain: "remote-work-hub-211d8.firebaseapp.com",
+  projectId: "remote-work-hub-211d8",
+  storageBucket: "remote-work-hub-211d8.firebasestorage.app",
+  messagingSenderId: "697750475671",
+  appId: "1:697750475671:web:6e609411ae003e6500aad2"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -71,7 +71,7 @@ async function loadJobs() {
     allJobs.push(doc.data());
   });
 
-  renderJobs(allJobs);
+  renderJobs(<a href="job-details.html?id=${job.title}" class="btn">View Job</a>);
 }
 
 function renderJobs(jobs) {
