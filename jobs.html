@@ -3,21 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jobs</title>
+  <title>Jobs - Remote Work Hub PH</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>Available Jobs</h1>
+<header>
+  <h2>Remote Work Hub PH</h2>
 
-<div>
-  <h3>Virtual Assistant</h3>
-  <p>$3 - $6/hr</p>
-</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="apply.html">Apply</a>
+  </nav>
+</header>
 
-<div>
-  <h3>Graphic Designer</h3>
-  <p>$150/project</p>
-</div>
+<!-- SEARCH + FILTER UI -->
+<section class="jobs">
+
+  <h1>Find Remote Jobs</h1>
+  <p>Browse opportunities from global employers</p>
+
+  <div style="margin: 20px 0;">
+    <input type="text" placeholder="Search jobs..." style="padding:10px; width:60%; border-radius:6px; border:1px solid #ccc;">
+    
+    <select style="padding:10px; border-radius:6px; border:1px solid #ccc;">
+      <option>All Categories</option>
+      <option>Virtual Assistant</option>
+      <option>Design</option>
+      <option>Marketing</option>
+      <option>Development</option>
+    </select>
+  </div>
+
+  <!-- JOB CARDS -->
+
+  <div class="job-card">
+    <h3>Virtual Assistant</h3>
+    <p><b>Type:</b> Full-time | <b>Pay:</b> $3 - $6/hr</p>
+    <p>Manage emails, scheduling, and admin tasks.</p>
+    <a href="apply.html" class="btn">Apply Now</a>
+  </div>
+
+  <div class="job-card">
+    <h3>Graphic Designer</h3>
+    <p><b>Type:</b> Freelance | <b>Pay:</b> $150/project</p>
+    <p>Create social media posts and branding designs.</p>
+    <a href="apply.html" class="btn">Apply Now</a>
+  </div>
+
+  <div class="job-card">
+    <h3>Social Media Manager</h3>
+    <p><b>Type:</b> Part-time | <b>Pay:</b> $400/month</p>
+    <p>Manage posting, engagement, and content strategy.</p>
+    <a href="apply.html" class="btn">Apply Now</a>
+  </div>
+
+</section>
+
+<footer>
+  <p>© 2026 Remote Work Hub PH</p>
+</footer>
 
 </body>
 </html>
