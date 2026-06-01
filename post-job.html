@@ -1,12 +1,3 @@
-<script src="auth.js"></script>
-<script>
-  let user = JSON.parse(localStorage.getItem("loggedInUser"));
-
-  if (!user || user.role !== "employer") {
-    alert("Only employers can post jobs!");
-    window.location.href = "login.html";
-  }
-</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,22 +38,52 @@
 
 </section>
 
-<script>
-function postJob() {
-  let job = {
-    title: document.getElementById("title").value,
-    rate: document.getElementById("rate").value,
-    type: document.getElementById("type").value,
-    desc: document.getElementById("desc").value
-  };
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
-  jobs.push(job);
-  localStorage.setItem("jobs", JSON.stringify(jobs));
+/* 🔥 PASTE YOUR FIREBASE CONFIG HERE */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-  alert("Job posted successfully!");
-  window.location.href = "jobs.html";
-}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.postJob = async function () {
+
+  let title = document.getElementById("title").value;
+  let rate = document.getElementById("rate").value;
+  let type = document.getElementById("type").value;
+  let desc = document.getElementById("desc").value;
+
+  if (!title || !rate || !type || !desc) {
+    alert("Please fill all fields!");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "jobs"), {
+      title: title,
+      rate: rate,
+      type: type,
+      desc: desc,
+      createdAt: new Date()
+    });
+
+    alert("Job posted successfully to Firebase!");
+    window.location.href = "jobs.html";
+
+  } catch (error) {
+    alert("Error posting job: " + error.message);
+  }
+};
 </script>
 
 </body>
