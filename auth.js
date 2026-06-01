@@ -6,11 +6,17 @@ function signup() {
 
   let users = JSON.parse(localStorage.getItem("users")) || [];
 
-  users.push({ name, email, password, role });
+  // prevent duplicate emails
+  let exists = users.find(u => u.email === email);
+  if (exists) {
+    alert("Email already exists!");
+    return;
+  }
 
+  users.push({ name, email, password, role });
   localStorage.setItem("users", JSON.stringify(users));
 
-  alert("Account created! Please login.");
+  alert("Account created successfully!");
   window.location.href = "login.html";
 }
 
@@ -23,7 +29,7 @@ function login() {
   let user = users.find(u => u.email === email && u.password === password);
 
   if (!user) {
-    alert("Invalid login!");
+    alert("Invalid email or password!");
     return;
   }
 
@@ -35,7 +41,7 @@ function login() {
 
 function logout() {
   localStorage.removeItem("loggedInUser");
-  alert("Logged out");
+  alert("Logged out successfully!");
   window.location.href = "index.html";
 }
 
