@@ -1,88 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jobs - Remote Work Hub PH</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<header>
-  <h2>Remote Work Hub PH</h2>
-
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="jobs.html">Jobs</a>
-    <a href="apply.html">Apply</a>
-  </nav>
-</header>
-
 <section class="jobs">
 
   <h1>Find Remote Jobs</h1>
   <p>Browse opportunities from global employers</p>
 
-  <!-- SEARCH + FILTER -->
-  <div style="margin: 20px 0;">
-    <input 
-      type="text" 
-      placeholder="Search jobs..." 
-      onkeyup="filterJobs()" 
-      style="padding:10px; width:60%; border-radius:6px; border:1px solid #ccc;"
-    >
-
-    <select style="padding:10px; border-radius:6px; border:1px solid #ccc;">
-      <option>All Categories</option>
-      <option>Virtual Assistant</option>
-      <option>Design</option>
-      <option>Marketing</option>
-      <option>Development</option>
-    </select>
-  </div>
-
-  <!-- JOB CARDS -->
-
-  <div class="job-card">
-    <h3><a href="job-details.html" style="text-decoration:none; color:#0f62fe;">Virtual Assistant</a></h3>
-    <p><b>Type:</b> Full-time | <b>Pay:</b> $3 - $6/hr</p>
-    <p>Manage emails, scheduling, and admin tasks.</p>
-    <a href="apply.html" class="btn">Apply Now</a>
-  </div>
-
-  <div class="job-card">
-    <h3><a href="job-details.html" style="text-decoration:none; color:#0f62fe;">Graphic Designer</a></h3>
-    <p><b>Type:</b> Freelance | <b>Pay:</b> $150/project</p>
-    <p>Create social media posts and branding designs.</p>
-    <a href="apply.html" class="btn">Apply Now</a>
-  </div>
-
-  <div class="job-card">
-    <h3><a href="job-details.html" style="text-decoration:none; color:#0f62fe;">Social Media Manager</a></h3>
-    <p><b>Type:</b> Part-time | <b>Pay:</b> $400/month</p>
-    <p>Manage posting, engagement, and content strategy.</p>
-    <a href="apply.html" class="btn">Apply Now</a>
-  </div>
+  <div id="jobList"></div>
 
 </section>
 
-<footer>
-  <p>© 2026 Remote Work Hub PH</p>
-</footer>
-
-<!-- SEARCH FUNCTION -->
 <script>
-function filterJobs() {
-  let input = document.querySelector("input").value.toLowerCase();
-  let cards = document.querySelectorAll(".job-card");
+function loadJobs() {
+  let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
 
-  cards.forEach(card => {
-    let text = card.innerText.toLowerCase();
-    card.style.display = text.includes(input) ? "block" : "none";
-  });
+  let container = document.getElementById("jobList");
+
+  let defaultJobs = `
+    <div class="job-card">
+      <h3>Virtual Assistant</h3>
+      <p>$3 - $6/hr</p>
+      <a href="apply.html" class="btn">Apply Now</a>
+    </div>
+
+    <div class="job-card">
+      <h3>Graphic Designer</h3>
+      <p>$150/project</p>
+      <a href="apply.html" class="btn">Apply Now</a>
+    </div>
+  `;
+
+  let userJobs = jobs.map(job => `
+    <div class="job-card">
+      <h3>${job.title}</h3>
+      <p>${job.rate} | ${job.type}</p>
+      <p>${job.desc}</p>
+      <a href="apply.html" class="btn">Apply Now</a>
+    </div>
+  `).join("");
+
+  container.innerHTML = defaultJobs + userJobs;
 }
-</script>
 
-</body>
-</html>
+loadJobs();
+</script>
