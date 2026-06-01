@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Job Details - Remote Work Hub PH</title>
+  <title>Job Details</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -13,47 +12,63 @@
   <h2>Remote Work Hub PH</h2>
 
   <nav>
-  <a href="index.html">Home</a>
-  <a href="jobs.html">Jobs</a>
-  <a href="post-job.html">Post Job</a>
-  <a href="apply.html">Apply</a>
-</nav>
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="post-job.html">Post Job</a>
+    <a href="login.html">Login</a>
+  </nav>
 </header>
 
 <section class="jobs">
 
-  <h1>Virtual Assistant</h1>
-
-  <div class="job-card">
-
-    <p><b>Type:</b> Full-time</p>
-    <p><b>Rate:</b> $3 - $6/hr</p>
-    <p><b>Location:</b> Remote</p>
-
-    <hr>
-
-    <h3>Job Description</h3>
-    <p>
-      We are looking for a Virtual Assistant to handle email management, scheduling,
-      data entry, and general administrative support for a growing international team.
-    </p>
-
-    <h3>Requirements</h3>
-    <ul>
-      <li>Good communication skills</li>
-      <li>Basic computer knowledge</li>
-      <li>Reliable internet connection</li>
-    </ul>
-
-    <a href="apply.html" class="btn">Apply Now</a>
-
+  <div id="jobDetails" class="job-card">
+    Loading job...
   </div>
 
 </section>
 
-<footer>
-  <p>© 2026 Remote Work Hub PH</p>
-</footer>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* GET URL PARAM */
+const params = new URLSearchParams(window.location.search);
+const jobId = params.get("id");
+
+async function loadJob() {
+  const snapshot = await getDocs(collection(db, "jobs"));
+
+  snapshot.forEach(doc => {
+    let job = doc.data();
+
+    if (job.title === jobId) {
+      document.getElementById("jobDetails").innerHTML = `
+        <h2>${job.title}</h2>
+        <p><b>Type:</b> ${job.type}</p>
+        <p><b>Rate:</b> ${job.rate}</p>
+        <p>${job.desc}</p>
+        <p><b>Posted by:</b> ${job.createdBy || "Unknown"}</p>
+
+        <a href="apply.html" class="btn">Apply Now</a>
+      `;
+    }
+  });
+}
+
+loadJob();
+</script>
 
 </body>
 </html>
