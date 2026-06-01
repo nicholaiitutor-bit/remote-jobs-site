@@ -2,49 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
+  <title>Sign Up - Remote Work Hub PH</title>
   <link rel="stylesheet" href="style.css">
-  <script src="auth.js"></script>
 </head>
 
 <body>
 
 <header>
   <h2>Remote Work Hub PH</h2>
-
-  <!-- UNIVERSAL NAV -->
-  <nav>
-  <a href="index.html">Home</a>
-  <a href="jobs.html">Jobs</a>
-  <a href="post-job.html">Post Job</a>
-  <a href="login.html">Login</a>
-  <a href="employer-dashboard.html">Dashboard</a>
-</nav>
 </header>
 
-<section class="jobs">
+<section class="hero">
 
-  <h1>Create Account</h1>
+  <h1>Create Your Account</h1>
+  <p>Join as an employer or job seeker</p>
 
-  <div class="job-card">
+  <div class="job-card" style="max-width:400px; margin:auto;">
 
     <input id="name" placeholder="Full Name" style="width:100%; padding:10px; margin:5px 0;">
+
     <input id="email" placeholder="Email" style="width:100%; padding:10px; margin:5px 0;">
+
     <input id="password" type="password" placeholder="Password" style="width:100%; padding:10px; margin:5px 0;">
 
     <select id="role" style="width:100%; padding:10px; margin:5px 0;">
-      <option value="freelancer">Freelancer</option>
+      <option value="">Select Role</option>
       <option value="employer">Employer</option>
+      <option value="jobseeker">Job Seeker</option>
     </select>
 
     <button class="btn" onclick="signup()">Sign Up</button>
 
-    <p>Already have an account? <a href="login.html">Login here</a></p>
-
   </div>
 
 </section>
+
+<script>
+function signup() {
+
+  let user = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+    role: document.getElementById("role").value
+  };
+
+  if (!user.name || !user.email || !user.password || !user.role) {
+    alert("Please fill all fields!");
+    return;
+  }
+
+  localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+  alert("Account created successfully!");
+
+  window.location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
