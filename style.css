@@ -1,1 +1,113 @@
-style.css
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6fb;
+  color: #333;
+}
+
+/* HEADER */
+header {
+  background: #1E73BE;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h2 {
+  margin: 0;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+/* HERO */
+.hero {
+  background: white;
+  text-align: center;
+  padding: 70px 20px;
+}
+
+.hero h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: inline-block;
+  background: #1E73BE;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* STATS */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 30px;
+  background: #eef3ff;
+  text-align: center;
+}
+
+.stats h3 {
+  margin: 0;
+  color: #1E73BE;
+}
+
+/* JOB SECTION */
+.jobs {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.job-card {
+  background: white;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.job-card:hover {
+  transform: translateY(-3px);
+}
+
+.job-card h3 {
+  margin-top: 0;
+  color: #1E73BE;
+}
+
+.job-card p {
+  color: #666;
+}
+
+/* BUTTON */
+.job-card .btn {
+  margin-top: 10px;
+  display: inline-block;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #1E73BE;
+  color: white;
+  margin-top: 40px;
+}
