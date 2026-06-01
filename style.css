@@ -1,7 +1,7 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f3f6fb;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f9;
   color: #222;
 }
 
@@ -9,70 +9,87 @@ body {
 header {
   background: #0a66c2;
   color: white;
-  padding: 14px 25px;
+  padding: 14px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 header h2 {
-  font-size: 18px;
   margin: 0;
+  font-size: 18px;
 }
 
 nav a {
   color: white;
   text-decoration: none;
   margin-left: 15px;
-  font-weight: 600;
   font-size: 14px;
+  font-weight: 600;
+  opacity: 0.9;
 }
 
-/* LAYOUT */
-.container {
-  display: flex;
-  max-width: 1200px;
+nav a:hover {
+  opacity: 1;
+}
+
+/* HERO */
+.hero {
+  background: white;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #666;
+}
+
+/* BUTTON */
+.btn {
+  display: inline-block;
+  background: #0a66c2;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.btn:hover {
+  background: #084c91;
+}
+
+/* MARKETPLACE LAYOUT */
+.jobs {
+  max-width: 1100px;
   margin: auto;
   padding: 20px;
-  gap: 20px;
 }
 
-/* SIDEBAR FILTER */
-.sidebar {
-  width: 250px;
+/* JOB LIST ITEM (ONLINEJOBS STYLE) */
+.job-item,
+.job-card {
   background: white;
-  padding: 15px;
-  border-radius: 10px;
-  height: fit-content;
-}
-
-.sidebar h3 {
-  margin-top: 0;
-}
-
-.sidebar input,
-.sidebar select {
-  width: 100%;
-  padding: 8px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-/* JOB LIST */
-.job-list {
-  flex: 1;
-}
-
-.job-item {
-  background: white;
-  padding: 15px;
+  padding: 14px 16px;
   margin-bottom: 10px;
-  border-radius: 8px;
+  border-radius: 6px;
   border-left: 4px solid #0a66c2;
+  transition: 0.2s;
 }
 
-.job-item h3 {
+.job-item:hover,
+.job-card:hover {
+  transform: translateY(-2px);
+}
+
+.job-item h3,
+.job-card h3 {
   margin: 0;
   font-size: 16px;
   color: #0a66c2;
@@ -84,26 +101,33 @@ nav a {
   margin-top: 4px;
 }
 
-.btn {
-  display: inline-block;
-  margin-top: 8px;
-  background: #0a66c2;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 13px;
+/* INPUTS */
+input, select, textarea {
+  font-family: inherit;
+  font-size: 14px;
 }
 
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 60px 20px;
+/* SIDEBAR (for jobs page if used) */
+.container {
+  display: flex;
+  gap: 20px;
+}
+
+.sidebar {
+  width: 250px;
   background: white;
+  padding: 15px;
+  border-radius: 6px;
+  height: fit-content;
 }
 
-.hero h1 {
-  font-size: 32px;
+.sidebar input,
+.sidebar select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 /* FOOTER */
