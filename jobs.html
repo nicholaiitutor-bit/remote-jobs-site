@@ -20,69 +20,95 @@
   </nav>
 </header>
 
-<div class="container">
+<section class="jobs">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <h3>Search</h3>
-    <input type="text" placeholder="Search jobs..." onkeyup="filterJobs()">
+  <h1>Find Remote Jobs</h1>
+  <p>Browse opportunities from global employers</p>
 
-    <h3>Category</h3>
-    <select>
-      <option>All</option>
-      <option>Virtual Assistant</option>
-      <option>Design</option>
-      <option>Marketing</option>
-      <option>Development</option>
-    </select>
-
-    <h3>Type</h3>
-    <select>
-      <option>All</option>
-      <option>Full-time</option>
-      <option>Part-time</option>
-      <option>Freelance</option>
-    </select>
-  </div>
+  <!-- SEARCH -->
+  <input 
+    type="text" 
+    placeholder="Search jobs..." 
+    onkeyup="filterJobs()" 
+    style="padding:10px; width:60%; border-radius:6px; border:1px solid #ccc; margin-bottom:15px;"
+  >
 
   <!-- JOB LIST -->
-  <div class="job-list" id="jobList">
+  <div id="jobList"></div>
 
-    <div class="job-item">
-      <h3>Virtual Assistant</h3>
-      <div class="job-meta">Full-time • $3 - $6/hr • Remote</div>
-      <a href="apply.html" class="btn">Apply</a>
-    </div>
-
-    <div class="job-item">
-      <h3>Graphic Designer</h3>
-      <div class="job-meta">Freelance • $150/project • Remote</div>
-      <a href="apply.html" class="btn">Apply</a>
-    </div>
-
-    <div class="job-item">
-      <h3>Social Media Manager</h3>
-      <div class="job-meta">Part-time • $400/month • Remote</div>
-      <a href="apply.html" class="btn">Apply</a>
-    </div>
-
-  </div>
-
-</div>
+</section>
 
 <footer>
-  © 2026 Remote Work Hub PH
+  <p>© 2026 Remote Work Hub PH</p>
 </footer>
 
-<script>
-function filterJobs() {
-  let input = document.querySelector(".sidebar input").value.toLowerCase();
-  let jobs = document.querySelectorAll(".job-item");
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* 🔥 PASTE YOUR FIREBASE CONFIG HERE */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let allJobs = [];
+
+async function loadJobs() {
+  const querySnapshot = await getDocs(collection(db, "jobs"));
+
+  allJobs = [];
+
+  querySnapshot.forEach((doc) => {
+    allJobs.push(doc.data());
+  });
+
+  renderJobs(allJobs);
+}
+
+function renderJobs(jobs) {
+  let html = "";
+
+  if (jobs.length === 0) {
+    html = "<p>No jobs found.</p>";
+  }
 
   jobs.forEach(job => {
-    job.style.display = job.innerText.toLowerCase().includes(input) ? "block" : "none";
+    html += `
+      <div class="job-item">
+        <h3>${job.title}</h3>
+        <div class="job-meta">${job.type} • ${job.rate}</div>
+        <p>${job.desc}</p>
+        <a href="apply.html" class="btn">Apply</a>
+      </div>
+    `;
   });
+
+  document.getElementById("jobList").innerHTML = html;
 }
+
+/* SEARCH FUNCTION */
+window.filterJobs = function () {
+  let value = document.querySelector("input").value.toLowerCase();
+
+  let filtered = allJobs.filter(job =>
+    job.title.toLowerCase().includes(value) ||
+    job.type.toLowerCase().includes(value) ||
+    job.desc.toLowerCase().includes(value)
+  );
+
+  renderJobs(filtered);
+};
+
+loadJobs();
 </script>
 
 </body>
