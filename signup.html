@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="auth.js"></script>
+</head>
+
+<body>
+
+<header>
+  <h2>Remote Work Hub PH</h2>
+</header>
+
+<section class="jobs">
+
+  <h1>Create Account</h1>
+
+  <div class="job-card">
+
+    <input id="name" placeholder="Full Name" style="width:100%; padding:10px;">
+    <input id="email" placeholder="Email" style="width:100%; padding:10px;">
+    <input id="password" type="password" placeholder="Password" style="width:100%; padding:10px;">
+
+    <select id="role" style="width:100%; padding:10px;">
+      <option value="freelancer">Freelancer</option>
+      <option value="employer">Employer</option>
+    </select>
+
+    <button class="btn" onclick="signup()">Sign Up</button>
+
+    <p>Already have an account? <a href="login.html">Login</a></p>
+
+  </div>
+
+</section>
+
+</body>
+</html>
