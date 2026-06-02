@@ -1,43 +1,63 @@
-export function renderNav() {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-  const nav = document.getElementById("navbar");
+import { auth } from "./firebase.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { db } from "./firebase.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  if (!nav) return;
+const navbar = document.getElementById("navbar");
+
+onAuthStateChanged(auth, async (user) => {
+
+  if (!navbar) return;
 
   if (!user) {
-    nav.innerHTML = `
+
+    navbar.innerHTML = `
       <a href="index.html">Home</a>
       <a href="jobs.html">Jobs</a>
       <a href="login.html">Login</a>
       <a href="signup.html">Sign Up</a>
     `;
+
+    return;
   }
 
-  else if (user.role === "employer") {
-    nav.innerHTML = `
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+
+  if (!userDoc.exists()) {
+    return;
+  }
+
+  const userData = userDoc.data();
+
+  if (userData.role === "employer") {
+
+    navbar.innerHTML = `
       <a href="index.html">Home</a>
       <a href="jobs.html">Jobs</a>
       <a href="post-job.html">Post Job</a>
       <a href="employer-dashboard.html">Dashboard</a>
-      <a href="#" id="logout">Logout</a>
+      <a href="#" id="logoutBtn">Logout</a>
     `;
-  }
 
-  else {
-    nav.innerHTML = `
+  } else {
+
+    navbar.innerHTML = `
       <a href="index.html">Home</a>
       <a href="jobs.html">Jobs</a>
       <a href="jobseeker-dashboard.html">My Applications</a>
-      <a href="#" id="logout">Logout</a>
+      <a href="#" id="logoutBtn">Logout</a>
     `;
+
   }
 
-  const logoutBtn = document.getElementById("logout");
+  const logoutBtn = document.getElementById("logoutBtn");
 
   if (logoutBtn) {
-    logoutBtn.onclick = () => {
-      localStorage.removeItem("currentUser");
+    logoutBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await signOut(auth);
       window.location.href = "index.html";
-    };
+    });
   }
-}
+
+});
