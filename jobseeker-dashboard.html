@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Applications</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h2>Remote Work Hub PH</h2>
+  <nav id="navbar"></nav>
+</header>
+
+<section class="jobs">
+  <h2>My Applications</h2>
+
+  <div id="applications"></div>
+</section>
+
+<script type="module">
+import { renderNav } from "./nav.js";
+
+renderNav();
+
+const user = JSON.parse(localStorage.getItem("currentUser"));
+const container = document.getElementById("applications");
+
+/*
+  NOTE:
+  You will need an "applications" collection in Firestore later
+*/
+
+container.innerHTML = `
+  <p>No applications yet.</p>
+  <a href="jobs.html" class="btn">Browse Jobs</a>
+`;
+</script>
+
+</body>
+</html>
