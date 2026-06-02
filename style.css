@@ -1,9 +1,138 @@
+/* =========================
+   BASE
+========================= */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f9;
+  color: #222;
+}
+
+/* =========================
+   HEADER (OLJ STYLE)
+========================= */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #14a800;
+}
+
 nav a {
-  color: #333;
+  margin-left: 12px;
+  text-decoration: none;
   font-weight: 600;
   font-size: 14px;
+  color: #333;
 }
 
 nav a:hover {
   color: #14a800;
+}
+
+/* =========================
+   LAYOUT CONTAINER
+========================= */
+.jobs {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* =========================
+   HERO (HOME PAGE)
+========================= */
+.hero {
+  text-align: center;
+  padding: 50px 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.hero h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #666;
+}
+
+/* =========================
+   BUTTONS (OLJ STYLE)
+========================= */
+.btn {
+  display: inline-block;
+  padding: 10px 14px;
+  margin-top: 10px;
+  background: #14a800;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #0e7a00;
+}
+
+/* secondary button */
+.btn.secondary {
+  background: #28a745;
+}
+
+/* =========================
+   JOB CARDS (IMPORTANT)
+========================= */
+.job-card {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.job-card h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #14a800;
+}
+
+.job-card p {
+  font-size: 13px;
+  color: #666;
+  margin: 5px 0;
+}
+
+/* =========================
+   INPUTS / FORMS
+========================= */
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  color: #777;
+  margin-top: 40px;
 }
