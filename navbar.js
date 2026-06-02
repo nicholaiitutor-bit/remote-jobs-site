@@ -1,11 +1,11 @@
 import { initAuth, currentUser, logout } from "./auth.js";
 
-export function loadNavbar(navElementId = "navbar") {
-  const navbar = document.getElementById(navElementId);
+export function loadNavbar() {
+  const navbar = document.getElementById("navbar");
 
   initAuth(() => {
 
-    // NOT LOGGED IN
+    // GUEST USER
     if (!currentUser) {
       navbar.innerHTML = `
         <a href="index.html">Home</a>
@@ -13,11 +13,10 @@ export function loadNavbar(navElementId = "navbar") {
         <a href="login.html">Login</a>
         <a href="signup.html">Sign Up</a>
       `;
-      return;
     }
 
     // EMPLOYER
-    if (currentUser.role === "employer") {
+    else if (currentUser.role === "employer") {
       navbar.innerHTML = `
         <a href="index.html">Home</a>
         <a href="jobs.html">Jobs</a>
@@ -37,12 +36,9 @@ export function loadNavbar(navElementId = "navbar") {
       `;
     }
 
-    const btn = document.getElementById("logout");
-    if (btn) {
-      btn.onclick = async () => {
-        await logout();
-        location.reload();
-      };
-    }
+    document.getElementById("logout")?.addEventListener("click", async () => {
+      await logout();
+      location.reload();
+    });
   });
 }
