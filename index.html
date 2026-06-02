@@ -1,39 +1,62 @@
-<nav id="navbar"></nav>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Jobs Platform</title>
 
-<script type="module">
-import { initAuth, currentUser, logout } from "./auth.js";
+  <!-- YOUR CSS (IMPORTANT) -->
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-const navbar = document.getElementById("navbar");
+<body>
 
-initAuth(() => {
+  <!-- NAVBAR -->
+  <nav id="navbar"></nav>
 
-  if (!currentUser) {
-    navbar.innerHTML = `
-      <a href="index.html">Home</a>
-      <a href="jobs.html">Jobs</a>
-      <a href="login.html">Login</a>
-      <a href="signup.html">Sign Up</a>
-    `;
-  } else if (currentUser.role === "employer") {
-    navbar.innerHTML = `
-      <a href="index.html">Home</a>
-      <a href="jobs.html">Jobs</a>
-      <a href="post-job.html">Post Job</a>
-      <a href="employer-dashboard.html">Dashboard</a>
-      <a href="#" id="logout">Logout</a>
-    `;
-  } else {
-    navbar.innerHTML = `
-      <a href="index.html">Home</a>
-      <a href="jobs.html">Jobs</a>
-      <a href="#" id="logout">Logout</a>
-    `;
-  }
+  <!-- MAIN CONTENT -->
+  <main class="container">
+    <h1>Welcome to Online Jobs Platform</h1>
+    <p>Find remote jobs or hire talent easily.</p>
+  </main>
 
-  const btn = document.getElementById("logout");
-  if (btn) btn.onclick = async () => {
-    await logout();
-    location.reload();
-  };
-});
-</script>
+  <script type="module">
+    import { initAuth, currentUser, logout } from "./auth.js";
+
+    const navbar = document.getElementById("navbar");
+
+    initAuth(() => {
+
+      if (!currentUser) {
+        navbar.innerHTML = `
+          <a href="index.html">Home</a>
+          <a href="jobs.html">Jobs</a>
+          <a href="login.html">Login</a>
+          <a href="signup.html">Sign Up</a>
+        `;
+      } else if (currentUser.role === "employer") {
+        navbar.innerHTML = `
+          <a href="index.html">Home</a>
+          <a href="jobs.html">Jobs</a>
+          <a href="post-job.html">Post Job</a>
+          <a href="employer-dashboard.html">Dashboard</a>
+          <a href="#" id="logout">Logout</a>
+        `;
+      } else {
+        navbar.innerHTML = `
+          <a href="index.html">Home</a>
+          <a href="jobs.html">Jobs</a>
+          <a href="#" id="logout">Logout</a>
+        `;
+      }
+
+      const btn = document.getElementById("logout");
+      if (btn) btn.onclick = async () => {
+        await logout();
+        location.reload();
+      };
+    });
+  </script>
+
+</body>
+</html>
