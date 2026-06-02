@@ -1,106 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Post a Job - Remote Work Hub PH</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<header>
-  <h2>Remote Work Hub PH</h2>
-
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="jobs.html">Jobs</a>
-    <a href="post-job.html">Post Job</a>
-    <a href="employer-dashboard.html">Dashboard</a>
-    <a href="login.html">Login</a>
-  </nav>
-</header>
-
-<section class="jobs">
-
-  <h1>Employer Job Posting</h1>
-  <p>Post a remote job and reach global freelancers</p>
-
-  <div class="job-card">
-
-    <input id="title" placeholder="Job Title" style="width:100%; padding:10px; margin:5px 0;">
-    <input id="rate" placeholder="Salary / Rate" style="width:100%; padding:10px; margin:5px 0;">
-    <input id="type" placeholder="Job Type (Full-time, Freelance)" style="width:100%; padding:10px; margin:5px 0;">
-    <textarea id="desc" placeholder="Job Description" style="width:100%; padding:10px; margin:5px 0;"></textarea>
-
-    <button class="btn" onclick="postJob()">Post Job</button>
-
-  </div>
-
-</section>
-
-<!-- FIREBASE -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initAuth, currentUser } from "./auth.js";
+import { db } from "./firebase.js";
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 FIREBASE CONFIG */
-const firebaseConfig = {
-  apiKey: "AIzaSyAs5VqodQCgH-F-VYbM1zS2BzsoHOQGpzo",
-  authDomain: "remote-work-hub-211d8.firebaseapp.com",
-  projectId: "remote-work-hub-211d8",
-  storageBucket: "remote-work-hub-211d8.appspot.com",
-  messagingSenderId: "697750475671",
-  appId: "1:697750475671:web:6e609411ae003e6500aad2"
-};
+initAuth(() => {
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  if (!currentUser) {
+    alert("Login first");
+    location.href = "login.html";
+  }
 
-/* 🔐 CHECK LOGIN */
-const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (currentUser.role !== "employer") {
+    alert("Only employers can post jobs");
+    location.href = "index.html";
+  }
+});
 
-if (!user) {
-  alert("Please login first!");
-  window.location.href = "login.html";
-}
-
-if (user.role !== "employer") {
-  alert("Only employers can post jobs!");
-  window.location.href = "jobs.html";
-}
-
-/* POST JOB */
 window.postJob = async function () {
 
-  let title = document.getElementById("title").value;
-  let rate = document.getElementById("rate").value;
-  let type = document.getElementById("type").value;
-  let desc = document.getElementById("desc").value;
+  await addDoc(collection(db, "jobs"), {
+    title: title.value,
+    rate: rate.value,
+    type: type.value,
+    desc: desc.value,
+    createdBy: currentUser.uid,
+    createdAt: new Date()
+  });
 
-  if (!title || !rate || !type || !desc) {
-    alert("Please fill all fields!");
-    return;
-  }
-
-  try {
-    await addDoc(collection(db, "jobs"), {
-      title,
-      rate,
-      type,
-      desc,
-      createdAt: new Date(),
-      createdBy: user.name
-    });
-
-    alert("Job posted successfully!");
-    window.location.href = "jobs.html";
-
-  } catch (error) {
-    alert("Error posting job: " + error.message);
-  }
+  alert("Job posted!");
+  location.href = "jobs.html";
 };
 </script>
-
-</body>
-</html>
