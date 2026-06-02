@@ -1,255 +1,61 @@
 /* ======================================================
-   1. DESIGN TOKENS (SYSTEM VARIABLES)
+  SAAS NAVBAR STYLE
 ====================================================== */
-:root {
-  --primary: #14a800;        /* Upwork green */
-  --primary-dark: #0e7a00;
-  --text: #222;
-  --muted: #666;
-  --border: #e6e6e6;
-  --bg: #f4f6f9;
-  --white: #ffffff;
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-
-  --shadow-sm: 0 2px 6px rgba(0,0,0,0.05);
-  --shadow-md: 0 6px 16px rgba(0,0,0,0.08);
-
-  --font: Arial, Helvetica, sans-serif;
-}
-
-/* ======================================================
-   2. GLOBAL RESET
-====================================================== */
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-}
-
-/* ======================================================
-   3. TYPOGRAPHY
-====================================================== */
-h1, h2, h3 {
-  margin: 0;
-  font-weight: 600;
-}
-
-p {
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-/* ======================================================
-   4. HEADER / NAVBAR (SAAS STYLE TOP BAR)
-====================================================== */
 header {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 10px 20px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
+/* LOGO */
 .logo {
   font-size: 18px;
   font-weight: bold;
-  color: var(--primary);
+  color: #14a800;
+  letter-spacing: 0.3px;
+}
+
+/* NAV LINKS */
+nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 nav a {
-  margin-left: 15px;
   text-decoration: none;
-  color: var(--text);
-  font-weight: 600;
+  color: #333;
   font-size: 14px;
+  font-weight: 600;
   transition: 0.2s;
+  padding: 6px 8px;
+  border-radius: 6px;
 }
 
 nav a:hover {
-  color: var(--primary);
+  color: #14a800;
+  background: #f2f7f2;
 }
 
-/* ======================================================
-   5. HERO SECTION (MARKETPLACE LANDING STYLE)
-====================================================== */
-.hero {
-  background: var(--white);
-  padding: 50px 20px;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
+/* PRIMARY BUTTON STYLE (OLJ SIGN UP / POST JOB) */
+.nav-btn {
+  background: #14a800;
+  color: white !important;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 
-.hero h1 {
-  font-size: 32px;
-  margin-bottom: 10px;
-}
-
-.hero p {
-  margin-bottom: 20px;
-}
-
-/* ======================================================
-   6. SEARCH INPUT
-====================================================== */
-.search-box-input {
-  width: 60%;
-  max-width: 600px;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  outline: none;
-}
-
-/* ======================================================
-   7. BUTTON SYSTEM (UI KIT CORE)
-====================================================== */
-.btn {
-  display: inline-block;
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  background: var(--primary);
-  color: white;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  transition: 0.2s;
-  border: none;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background: var(--primary-dark);
-}
-
-/* Secondary button */
-.btn-secondary {
-  background: #28a745;
-}
-
-.btn-secondary:hover {
-  background: #1e7e34;
-}
-
-/* ======================================================
-   8. LAYOUT SYSTEM
-====================================================== */
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px;
-}
-
-.jobs {
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px;
-}
-
-/* ======================================================
-   9. JOB GRID (UPWORK STYLE)
-====================================================== */
-#jobList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 15px;
-}
-
-/* ======================================================
-   10. JOB CARD (CORE COMPONENT)
-====================================================== */
-.job-card {
-  background: var(--white);
-  padding: 15px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  transition: 0.2s ease;
-}
-
-.job-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--primary);
-}
-
-.job-card h3 {
-  font-size: 16px;
-  color: var(--primary);
-}
-
-.job-meta {
-  font-size: 12px;
-  color: var(--muted);
-  margin: 6px 0;
-}
-
-/* ======================================================
-   11. FORMS
-====================================================== */
-input, select, textarea {
-  font-family: var(--font);
-}
-
-input, textarea, select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  outline: none;
-}
-
-/* ======================================================
-   12. FILTER BAR
-====================================================== */
-.filters {
-  max-width: 1100px;
-  margin: 15px auto;
-  padding: 0 20px;
-  display: flex;
-  gap: 10px;
-}
-
-/* ======================================================
-   13. FOOTER
-====================================================== */
-footer {
-  text-align: center;
-  padding: 20px;
-  background: var(--white);
-  border-top: 1px solid var(--border);
-  margin-top: 40px;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-/* ======================================================
-   14. RESPONSIVE
-====================================================== */
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 24px;
-  }
-
-  .search-box-input {
-    width: 90%;
-  }
-
-  .filters {
-    flex-direction: column;
-  }
-
-  nav a {
-    font-size: 13px;
-  }
+.nav-btn:hover {
+  background: #0e7a00;
+  color: white !important;
 }
