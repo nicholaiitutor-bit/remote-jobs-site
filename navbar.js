@@ -1,5 +1,4 @@
 import { auth, db } from "./firebase.js";
-
 import {
   onAuthStateChanged,
   signOut
@@ -12,79 +11,61 @@ import {
 
 const navbar = document.getElementById("navbar");
 
+if (!navbar) {
+  console.warn("Navbar not found on this page");
+}
+
 onAuthStateChanged(auth, async (user) => {
 
   if (!navbar) return;
 
   // GUEST
   if (!user) {
-
     navbar.innerHTML = `
       <a href="index.html">Home</a>
       <a href="jobs.html">Jobs</a>
       <a href="login.html">Login</a>
       <a href="signup.html">Sign Up</a>
     `;
-
     return;
   }
 
   try {
+    const snap = await getDoc(doc(db, "users", user.uid));
 
-    const snap =
-      await getDoc(doc(db, "users", user.uid));
+    const data = snap.exists() ? snap.data() : null;
 
-    if (!snap.exists()) {
+    const baseNav = `
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+    `;
 
-      navbar.innerHTML = `
-        <a href="index.html">Home</a>
-        <a href="jobs.html">Jobs</a>
-        <a href="#" id="logoutBtn">Logout</a>
-      `;
+    let roleNav = "";
 
-      return;
-    }
-
-    const data = snap.data();
-
-    if (data.role === "employer") {
-
-      navbar.innerHTML = `
-        <a href="index.html">Home</a>
-        <a href="jobs.html">Jobs</a>
+    if (data?.role === "employer") {
+      roleNav = `
         <a href="post-job.html">Post Job</a>
         <a href="employer-dashboard.html">Dashboard</a>
-        <a href="#" id="logoutBtn">Logout</a>
       `;
-
     } else {
-
-      navbar.innerHTML = `
-        <a href="index.html">Home</a>
-        <a href="jobs.html">Jobs</a>
+      roleNav = `
         <a href="jobseeker-dashboard.html">My Applications</a>
-        <a href="#" id="logoutBtn">Logout</a>
       `;
-
     }
 
-    document
-      .getElementById("logoutBtn")
-      ?.addEventListener("click", async (e) => {
+    navbar.innerHTML = `
+      ${baseNav}
+      ${roleNav}
+      <a href="#" id="logoutBtn">Logout</a>
+    `;
 
-        e.preventDefault();
-
-        await signOut(auth);
-
-        window.location.href =
-          "index.html";
-
-      });
+    document.getElementById("logoutBtn")?.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
 
   } catch (err) {
-
     console.error(err);
-
   }
-
 });
