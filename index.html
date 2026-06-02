@@ -1,62 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Online Jobs Platform</title>
-
-  <!-- YOUR CSS (IMPORTANT) -->
-  <link rel="stylesheet" href="style.css" />
+  <title>Online Jobs</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
+<header>
+  <h2>Online Jobs</h2>
   <nav id="navbar"></nav>
+</header>
 
-  <!-- MAIN CONTENT -->
-  <main class="container">
-    <h1>Welcome to Online Jobs Platform</h1>
-    <p>Find remote jobs or hire talent easily.</p>
-  </main>
+<section class="hero">
+  <h1>Find Remote Jobs</h1>
+  <p>Work from home opportunities worldwide</p>
+</section>
 
-  <script type="module">
-    import { initAuth, currentUser, logout } from "./auth.js";
+<main class="jobs">
+  <div id="jobList"></div>
+</main>
 
-    const navbar = document.getElementById("navbar");
+<script type="module">
+import { initAuth, currentUser, logout } from "./auth.js";
 
-    initAuth(() => {
+const navbar = document.getElementById("navbar");
 
-      if (!currentUser) {
-        navbar.innerHTML = `
-          <a href="index.html">Home</a>
-          <a href="jobs.html">Jobs</a>
-          <a href="login.html">Login</a>
-          <a href="signup.html">Sign Up</a>
-        `;
-      } else if (currentUser.role === "employer") {
-        navbar.innerHTML = `
-          <a href="index.html">Home</a>
-          <a href="jobs.html">Jobs</a>
-          <a href="post-job.html">Post Job</a>
-          <a href="employer-dashboard.html">Dashboard</a>
-          <a href="#" id="logout">Logout</a>
-        `;
-      } else {
-        navbar.innerHTML = `
-          <a href="index.html">Home</a>
-          <a href="jobs.html">Jobs</a>
-          <a href="#" id="logout">Logout</a>
-        `;
-      }
+initAuth(() => {
 
-      const btn = document.getElementById("logout");
-      if (btn) btn.onclick = async () => {
-        await logout();
-        location.reload();
-      };
-    });
-  </script>
+  if (!currentUser) {
+    navbar.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Sign Up</a>
+    `;
+  } else if (currentUser.role === "employer") {
+    navbar.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="post-job.html">Post Job</a>
+      <a href="employer-dashboard.html">Dashboard</a>
+      <a href="#" id="logout">Logout</a>
+    `;
+  } else {
+    navbar.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="#" id="logout">Logout</a>
+    `;
+  }
+
+  const btn = document.getElementById("logout");
+  if (btn) btn.onclick = async () => {
+    await logout();
+    location.reload();
+  };
+});
+</script>
 
 </body>
 </html>
