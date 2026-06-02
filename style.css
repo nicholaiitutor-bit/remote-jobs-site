@@ -1,6 +1,4 @@
-/* =========================
-   BASE
-========================= */
+/* BASE */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -8,9 +6,7 @@ body {
   color: #222;
 }
 
-/* =========================
-   HEADER (OLJ STYLE)
-========================= */
+/* HEADER */
 header {
   display: flex;
   justify-content: space-between;
@@ -26,6 +22,7 @@ header h2 {
   color: #14a800;
 }
 
+/* NAV */
 nav a {
   margin-left: 12px;
   text-decoration: none;
@@ -38,18 +35,7 @@ nav a:hover {
   color: #14a800;
 }
 
-/* =========================
-   LAYOUT CONTAINER
-========================= */
-.jobs {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-}
-
-/* =========================
-   HERO (HOME PAGE)
-========================= */
+/* HERO */
 .hero {
   text-align: center;
   padding: 50px 20px;
@@ -59,25 +45,17 @@ nav a:hover {
 
 .hero h1 {
   font-size: 28px;
-  margin-bottom: 10px;
 }
 
-.hero p {
-  color: #666;
-}
-
-/* =========================
-   BUTTONS (OLJ STYLE)
-========================= */
+/* BUTTON */
 .btn {
   display: inline-block;
   padding: 10px 14px;
-  margin-top: 10px;
   background: #14a800;
-  color: #fff;
-  text-decoration: none;
+  color: white;
   border-radius: 6px;
-  font-size: 14px;
+  text-decoration: none;
+  margin-top: 10px;
   border: none;
   cursor: pointer;
 }
@@ -86,14 +64,13 @@ nav a:hover {
   background: #0e7a00;
 }
 
-/* secondary button */
-.btn.secondary {
-  background: #28a745;
+/* JOBS */
+.jobs {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
 }
 
-/* =========================
-   JOB CARDS (IMPORTANT)
-========================= */
 .job-card {
   background: #fff;
   padding: 15px;
@@ -102,37 +79,19 @@ nav a:hover {
   border-radius: 10px;
 }
 
-.job-card h3 {
-  margin: 0;
-  font-size: 16px;
-  color: #14a800;
-}
-
-.job-card p {
-  font-size: 13px;
-  color: #666;
-  margin: 5px 0;
-}
-
-/* =========================
-   INPUTS / FORMS
-========================= */
-input, select, textarea {
+/* INPUTS */
+input, select {
   width: 100%;
   padding: 10px;
   margin: 6px 0;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 14px;
 }
 
-/* =========================
-   FOOTER
-========================= */
+/* FOOTER */
 footer {
   text-align: center;
   padding: 20px;
   font-size: 13px;
   color: #777;
-  margin-top: 40px;
 }
