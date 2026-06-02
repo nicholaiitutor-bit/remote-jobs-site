@@ -9,21 +9,30 @@ document.getElementById("loginBtn").onclick = async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const userCred = await signInWithEmailAndPassword(auth, email, password);
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
 
-  const uid = userCred.user.uid;
+    const uid = userCred.user.uid;
 
-  // 🔥 GET USER ROLE FROM FIRESTORE
-  const snap = await getDoc(doc(db, "users", uid));
+    const snap = await getDoc(doc(db, "users", uid));
 
-  const userData = snap.data();
+    if (!snap.exists()) {
+      alert("User profile missing in Firestore");
+      return;
+    }
 
-  // SAVE SESSION
-  localStorage.setItem("currentUser", JSON.stringify({
-    uid,
-    name: userData.name,
-    role: userData.role
-  }));
+    const userData = snap.data();
 
-  window.location.href = "index.html";
+    localStorage.setItem("currentUser", JSON.stringify({
+      uid,
+      name: userData.name,
+      role: userData.role
+    }));
+
+    window.location.href = "index.html";
+
+  } catch (err) {
+    console.log(err);
+    alert("Login failed");
+  }
 };
