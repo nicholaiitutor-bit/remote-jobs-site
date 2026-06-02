@@ -16,6 +16,7 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!navbar) return;
 
+  // GUEST
   if (!user) {
 
     navbar.innerHTML = `
@@ -28,43 +29,62 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  const snap = await getDoc(doc(db, "users", user.uid));
+  try {
 
-  if (!snap.exists()) return;
+    const snap =
+      await getDoc(doc(db, "users", user.uid));
 
-  const data = snap.data();
+    if (!snap.exists()) {
 
-  if (data.role === "employer") {
+      navbar.innerHTML = `
+        <a href="index.html">Home</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      `;
 
-    navbar.innerHTML = `
-      <a href="index.html">Home</a>
-      <a href="jobs.html">Jobs</a>
-      <a href="post-job.html">Post Job</a>
-      <a href="employer-dashboard.html">Dashboard</a>
-      <a href="#" id="logoutBtn">Logout</a>
-    `;
+      return;
+    }
 
-  } else {
+    const data = snap.data();
 
-    navbar.innerHTML = `
-      <a href="index.html">Home</a>
-      <a href="jobs.html">Jobs</a>
-      <a href="jobseeker-dashboard.html">My Applications</a>
-      <a href="#" id="logoutBtn">Logout</a>
-    `;
+    if (data.role === "employer") {
+
+      navbar.innerHTML = `
+        <a href="index.html">Home</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="post-job.html">Post Job</a>
+        <a href="employer-dashboard.html">Dashboard</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      `;
+
+    } else {
+
+      navbar.innerHTML = `
+        <a href="index.html">Home</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="jobseeker-dashboard.html">My Applications</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      `;
+
+    }
+
+    document
+      .getElementById("logoutBtn")
+      ?.addEventListener("click", async (e) => {
+
+        e.preventDefault();
+
+        await signOut(auth);
+
+        window.location.href =
+          "index.html";
+
+      });
+
+  } catch (err) {
+
+    console.error(err);
 
   }
-
-  document
-    .getElementById("logoutBtn")
-    ?.addEventListener("click", async (e) => {
-
-      e.preventDefault();
-
-      await signOut(auth);
-
-      window.location.href = "index.html";
-
-    });
 
 });
