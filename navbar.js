@@ -1,7 +1,14 @@
-import { auth } from "./firebase.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { db } from "./firebase.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { auth, db } from "./firebase.js";
+
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const navbar = document.getElementById("navbar");
 
@@ -21,15 +28,13 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  const userDoc = await getDoc(doc(db, "users", user.uid));
+  const snap = await getDoc(doc(db, "users", user.uid));
 
-  if (!userDoc.exists()) {
-    return;
-  }
+  if (!snap.exists()) return;
 
-  const userData = userDoc.data();
+  const data = snap.data();
 
-  if (userData.role === "employer") {
+  if (data.role === "employer") {
 
     navbar.innerHTML = `
       <a href="index.html">Home</a>
@@ -50,14 +55,16 @@ onAuthStateChanged(auth, async (user) => {
 
   }
 
-  const logoutBtn = document.getElementById("logoutBtn");
+  document
+    .getElementById("logoutBtn")
+    ?.addEventListener("click", async (e) => {
 
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async (e) => {
       e.preventDefault();
+
       await signOut(auth);
+
       window.location.href = "index.html";
+
     });
-  }
 
 });
