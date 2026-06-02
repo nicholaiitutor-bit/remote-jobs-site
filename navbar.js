@@ -1,51 +1,14 @@
-import { initAuth, currentUser, logout } from "./auth.js";
+<header style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid #ddd;background:#fff;">
+  
+  <h2 style="margin:0;color:#14a800;font-size:18px;">
+    Remote Work Hub PH
+  </h2>
 
-export function loadNavbar() {
-  const navbar = document.getElementById("navbar");
+  <nav>
+    <a href="index.html" style="margin-right:10px;text-decoration:none;">Home</a>
+    <a href="jobs.html" style="margin-right:10px;text-decoration:none;">Jobs</a>
+    <a href="login.html" style="margin-right:10px;text-decoration:none;">Login</a>
+    <a href="signup.html" style="text-decoration:none;">Sign Up</a>
+  </nav>
 
-  initAuth(() => {
-    if (!navbar) return;
-
-    // =========================
-    // GUEST USER (OLJ STYLE SIMPLE)
-    // =========================
-    if (!currentUser) {
-      navbar.innerHTML = `
-        <a href="index.html">Home</a>
-        <a href="jobs.html">Jobs</a>
-        <a href="login.html">Login</a>
-        <a href="signup.html" class="nav-btn">Sign Up</a>
-      `;
-    }
-
-    // =========================
-    // EMPLOYER DASHBOARD NAV
-    // =========================
-    else if (currentUser.role === "employer") {
-      navbar.innerHTML = `
-        <a href="index.html">Home</a>
-        <a href="jobs.html">Browse Jobs</a>
-        <a href="post-job.html" class="nav-btn">Post Job</a>
-        <a href="employer-dashboard.html">Dashboard</a>
-        <a href="#" id="logout">Logout</a>
-      `;
-    }
-
-    // =========================
-    // FREELANCER NAV
-    // =========================
-    else {
-      navbar.innerHTML = `
-        <a href="index.html">Home</a>
-        <a href="jobs.html">Find Jobs</a>
-        <a href="freelancer-dashboard.html">My Applications</a>
-        <a href="#" id="logout">Logout</a>
-      `;
-    }
-
-    document.getElementById("logout")?.addEventListener("click", async () => {
-      await logout();
-      location.reload();
-    });
-  });
-}
+</header>
