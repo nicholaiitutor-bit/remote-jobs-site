@@ -1,53 +1,118 @@
 <script type="module">
-import { db } from "./firebase.js";
-import { collection, addDoc, serverTimestamp } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-window.addEventListener("DOMContentLoaded", () => {
+import { auth, db } from "./firebase.js";
 
-  const user = JSON.parse(localStorage.getItem("currentUser"));
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+import {
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+let currentUser = null;
+
+/* CHECK LOGIN + ROLE */
+
+onAuthStateChanged(auth, async (user) => {
 
   if (!user) {
-    alert("Login first");
+
+    alert("Please login first");
+
     window.location.href = "login.html";
+
     return;
   }
 
-  if (user.role !== "employer") {
-    alert("Only employers can post jobs");
+  const userRef =
+    doc(db, "users", user.uid);
+
+  const userSnap =
+    await getDoc(userRef);
+
+  if (!userSnap.exists()) {
+
+    alert("User profile not found");
+
     window.location.href = "index.html";
+
     return;
   }
 
-  window.postJob = async function () {
-
-    const title = document.getElementById("title").value;
-    const rate = document.getElementById("rate").value;
-    const type = document.getElementById("type").value;
-    const desc = document.getElementById("desc").value;
-
-    try {
-      await addDoc(collection(db, "jobs"), {
-
-        title,
-        rate,
-        type,
-        description: desc,
-
-        employerId: user.uid,
-        employerName: user.name,
-
-        createdAt: serverTimestamp()
-      });
-
-      alert("Job posted successfully!");
-      window.location.href = "employer-dashboard.html";
-
-    } catch (err) {
-      console.log(err);
-      alert(err.message);
-    }
+  currentUser = {
+    uid: user.uid,
+    ...userSnap.data()
   };
 
+  if (currentUser.role !== "employer") {
+
+    alert("Only employers can post jobs");
+
+    window.location.href = "index.html";
+
+    return;
+  }
+
 });
+
+/* POST JOB */
+
+window.postJob = async function () {
+
+  const title =
+    document.getElementById("title").value;
+
+  const rate =
+    document.getElementById("rate").value;
+
+  const type =
+    document.getElementById("type").value;
+
+  const desc =
+    document.getElementById("desc").value;
+
+  if (!title || !rate || !type || !desc) {
+
+    alert("Please complete all fields");
+
+    return;
+  }
+
+  try {
+
+    await addDoc(
+      collection(db, "jobs"),
+      {
+        title: title,
+        rate: rate,
+        type: type,
+        description: desc,
+
+        employerId: currentUser.uid,
+        employerName: currentUser.name,
+
+        createdAt: serverTimestamp()
+      }
+    );
+
+    alert("Job posted successfully!");
+
+    window.location.href =
+      "employer-dashboard.html";
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(err.message);
+
+  }
+
+};
+
 </script>
