@@ -1,61 +1,9 @@
-/* ======================================================
-  SAAS NAVBAR STYLE
-====================================================== */
-
-header {
-  background: #ffffff;
-  border-bottom: 1px solid #e6e6e6;
-  padding: 10px 20px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-/* LOGO */
-.logo {
-  font-size: 18px;
-  font-weight: bold;
-  color: #14a800;
-  letter-spacing: 0.3px;
-}
-
-/* NAV LINKS */
-nav {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
 nav a {
-  text-decoration: none;
   color: #333;
-  font-size: 14px;
   font-weight: 600;
-  transition: 0.2s;
-  padding: 6px 8px;
-  border-radius: 6px;
+  font-size: 14px;
 }
 
 nav a:hover {
   color: #14a800;
-  background: #f2f7f2;
-}
-
-/* PRIMARY BUTTON STYLE (OLJ SIGN UP / POST JOB) */
-.nav-btn {
-  background: #14a800;
-  color: white !important;
-  padding: 6px 10px;
-  border-radius: 6px;
-}
-
-.nav-btn:hover {
-  background: #0e7a00;
-  color: white !important;
 }
