@@ -9,21 +9,51 @@
 
 <header>
   <h2>Remote Work Hub PH</h2>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="jobs.html">Jobs</a>
-    <a href="post-job.html">Post Job</a>
-    <a href="employer-dashboard.html">Dashboard</a>
-  </nav>
+  <nav id="navbar"></nav>
 </header>
 
 <section class="jobs">
   <h2>Employer Dashboard</h2>
 
-  <p>Welcome employer 👋</p>
+  <a href="post-job.html" class="btn">+ Post New Job</a>
 
-  <div id="myJobs">Loading your jobs...</div>
+  <div id="myJobs"></div>
 </section>
+
+<script type="module">
+import { renderNav } from "./nav.js";
+import { db } from "./firebase.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+renderNav();
+
+const user = JSON.parse(localStorage.getItem("currentUser"));
+const container = document.getElementById("myJobs");
+
+async function loadMyJobs() {
+  const snap = await getDocs(collection(db, "jobs"));
+
+  let html = "";
+
+  snap.forEach(doc => {
+    const job = doc.data();
+
+    if (job.employerId === user.uid) {
+      html += `
+        <div class="job-card">
+          <h3>${job.title}</h3>
+          <p>${job.type} • ${job.rate}</p>
+          <p>${job.description?.substring(0, 100)}</p>
+        </div>
+      `;
+    }
+  });
+
+  container.innerHTML = html || "<p>No jobs posted yet.</p>";
+}
+
+loadMyJobs();
+</script>
 
 </body>
 </html>
