@@ -12,14 +12,8 @@
 <header>
   <h2>Remote Work Hub PH</h2>
 
-  <nav>
-   <nav>
-    <a href="index.html">Home</a>
-    <a href="jobs.html">Jobs</a>
-    <a href="post-job.html">Post Job</a>
-    <a href="login.html">Login</a>
-    <a href="employer-dashboard.html">Dashboard</a>
-  </nav>
+  <!-- FIXED NAV -->
+  <nav id="navbar"></nav>
 </header>
 
 <section class="jobs">
@@ -36,7 +30,9 @@
   >
 
   <!-- JOB LIST -->
-  <div id="jobList"></div>
+  <div id="jobList">
+    <p>Loading jobs...</p>
+  </div>
 
 </section>
 
@@ -46,10 +42,10 @@
 
 <!-- FIREBASE -->
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 PASTE YOUR FIREBASE CONFIG HERE */
 const firebaseConfig = {
   apiKey: "AIzaSyAs5VqodQCgH-F-VYbM1zS2BzsoHOQGpzo",
   authDomain: "remote-work-hub-211d8.firebaseapp.com",
@@ -64,53 +60,100 @@ const db = getFirestore(app);
 
 let allJobs = [];
 
+/* LOAD JOBS */
 async function loadJobs() {
-  const querySnapshot = await getDocs(collection(db, "jobs"));
+
+  const snapshot = await getDocs(collection(db, "jobs"));
 
   allJobs = [];
 
-  querySnapshot.forEach((doc) => {
+  snapshot.forEach(doc => {
     allJobs.push(doc.data());
   });
 
-  renderJobs(<a href="job-details.html?id=${job.title}" class="btn">View Job</a>);
+  renderJobs(allJobs);
 }
 
+/* RENDER JOBS */
 function renderJobs(jobs) {
-  let html = "";
+
+  const container = document.getElementById("jobList");
 
   if (jobs.length === 0) {
-    html = "<p>No jobs found.</p>";
+    container.innerHTML = "<p>No jobs found.</p>";
+    return;
   }
 
-  jobs.forEach(job => {
-    html += `
-      <div class="job-item">
-        <h3>${job.title}</h3>
-        <div class="job-meta">${job.type} • ${job.rate}</div>
-        <p>${job.desc}</p>
-        <a href="apply.html" class="btn">Apply</a>
-      </div>
-    `;
-  });
-
-  document.getElementById("jobList").innerHTML = html;
+  container.innerHTML = jobs.map(job => `
+    <div class="job-item">
+      <h3>${job.title}</h3>
+      <div>${job.type} • ${job.rate}</div>
+      <p>${job.desc || ""}</p>
+      <a href="apply.html" class="btn">Apply</a>
+    </div>
+  `).join("");
 }
 
-/* SEARCH FUNCTION */
+/* SEARCH */
 window.filterJobs = function () {
-  let value = document.querySelector("input").value.toLowerCase();
 
-  let filtered = allJobs.filter(job =>
-    job.title.toLowerCase().includes(value) ||
-    job.type.toLowerCase().includes(value) ||
-    job.desc.toLowerCase().includes(value)
+  const value =
+    document.querySelector("input").value.toLowerCase();
+
+  const filtered = allJobs.filter(job =>
+    (job.title || "").toLowerCase().includes(value) ||
+    (job.type || "").toLowerCase().includes(value) ||
+    (job.desc || "").toLowerCase().includes(value)
   );
 
   renderJobs(filtered);
 };
 
+/* START */
 loadJobs();
+
+</script>
+
+<!-- NAV SCRIPT (FIXED) -->
+<script>
+
+const user = JSON.parse(localStorage.getItem("currentUser"));
+const navbar = document.getElementById("navbar");
+
+if (!user) {
+
+  navbar.innerHTML = `
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign Up</a>
+  `;
+
+} else if (user.role === "employer") {
+
+  navbar.innerHTML = `
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="post-job.html">Post Job</a>
+    <a href="employer-dashboard.html">Dashboard</a>
+    <a href="#" onclick="logout()">Logout</a>
+  `;
+
+} else {
+
+  navbar.innerHTML = `
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="#" onclick="logout()">Logout</a>
+  `;
+
+}
+
+function logout() {
+  localStorage.removeItem("currentUser");
+  window.location.href = "index.html";
+}
+
 </script>
 
 </body>
