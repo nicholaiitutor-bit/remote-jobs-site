@@ -1,3 +1,6 @@
+/* =========================
+   GLOBAL BASE
+========================= */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -5,7 +8,9 @@ body {
   color: #222;
 }
 
-/* TOP NAV (Upwork style) */
+/* =========================
+   TOP NAV (OLJ STYLE)
+========================= */
 header {
   background: #ffffff;
   border-bottom: 1px solid #e6e6e6;
@@ -15,73 +20,109 @@ header {
   align-items: center;
 }
 
-header h2 {
+.logo {
+  font-size: 18px;
+  font-weight: bold;
   color: #14a800;
-  margin: 0;
 }
 
-/* NAV LINKS */
 nav a {
   margin-left: 15px;
   text-decoration: none;
   color: #333;
   font-weight: 600;
   font-size: 14px;
+  transition: 0.2s;
 }
 
 nav a:hover {
   color: #14a800;
 }
 
-/* HERO (Upwork clean style) */
+/* =========================
+   HERO SECTION
+========================= */
 .hero {
-  background: white;
-  padding: 40px 20px;
+  background: #ffffff;
+  padding: 45px 20px;
   text-align: center;
   border-bottom: 1px solid #eee;
 }
 
 .hero h1 {
   font-size: 32px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
-/* SEARCH BAR */
+.hero p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* SEARCH BOX */
 .search-box {
   max-width: 700px;
-  margin: 15px auto;
-  display: flex;
+  margin: auto;
 }
 
 .search-box input {
-  flex: 1;
+  width: 100%;
   padding: 12px;
+  border-radius: 8px;
   border: 1px solid #ddd;
-  border-radius: 6px;
+  font-size: 14px;
 }
 
-/* JOB GRID (Upwork cards layout) */
+/* =========================
+   FILTER BAR (OLJ STYLE)
+========================= */
+.filters {
+  max-width: 1100px;
+  margin: 15px auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.filters select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 13px;
+  background: white;
+}
+
+/* =========================
+   JOB LIST CONTAINER
+========================= */
 .jobs {
   max-width: 1100px;
   margin: auto;
   padding: 20px;
+}
+
+/* GRID STYLE (OLJ + UPWORK MIX) */
+#jobList {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 15px;
 }
 
-/* JOB CARD */
+/* =========================
+   JOB CARD (CORE UI)
+========================= */
 .job-card {
   background: white;
   padding: 15px;
   border-radius: 10px;
   border: 1px solid #eee;
-  transition: 0.2s;
+  transition: 0.2s ease;
 }
 
 .job-card:hover {
   transform: translateY(-3px);
   border-color: #14a800;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .job-card h3 {
@@ -96,6 +137,15 @@ nav a:hover {
   margin: 6px 0;
 }
 
+.job-card p {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.4;
+}
+
+/* =========================
+   BUTTON (UPWORK STYLE)
+========================= */
 .btn {
   display: inline-block;
   margin-top: 10px;
@@ -105,8 +155,43 @@ nav a:hover {
   border-radius: 6px;
   text-decoration: none;
   font-size: 13px;
+  transition: 0.2s;
 }
 
 .btn:hover {
   background: #0e7a00;
+}
+
+/* =========================
+   JOB DETAILS PAGE
+========================= */
+.job-card hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 12px 0;
+}
+
+/* =========================
+   INPUTS (GLOBAL)
+========================= */
+input, select, textarea {
+  font-family: inherit;
+  outline: none;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+  }
+
+  nav a {
+    font-size: 13px;
+  }
+
+  .hero h1 {
+    font-size: 24px;
+  }
 }
