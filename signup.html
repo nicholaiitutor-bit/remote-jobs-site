@@ -1,30 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h2>Remote Work Hub PH</h2>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign Up</a>
+  </nav>
+</header>
+
+<section class="jobs">
+  <h2>Create Account</h2>
+
+  <input id="name" placeholder="Full Name"><br><br>
+  <input id="email" placeholder="Email"><br><br>
+  <input id="password" type="password" placeholder="Password"><br><br>
+
+  <select id="role">
+    <option value="freelancer">Freelancer</option>
+    <option value="employer">Employer</option>
+  </select>
+
+  <br><br>
+
+  <button class="btn" id="signupBtn">Sign Up</button>
+
+  <p id="msg"></p>
+</section>
+
 <script type="module">
-import { auth, db } from "./firebase.js";
-import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { signupUser } from "./auth.js";
 
-window.signupUser = async function () {
+document.getElementById("signupBtn").onclick = async () => {
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+    role: document.getElementById("role").value
+  };
 
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const role = document.getElementById("role").value;
-
-  if (!name || !email || !password || !role) {
-    alert("Fill all fields");
-    return;
+  try {
+    await signupUser(data);
+    document.getElementById("msg").innerText = "Account created!";
+    window.location.href = "login.html";
+  } catch (e) {
+    document.getElementById("msg").innerText = "Error creating account.";
   }
-
-  const userCred = await createUserWithEmailAndPassword(auth, email, password);
-
-  await setDoc(doc(db, "users", userCred.user.uid), {
-    name,
-    email,
-    role,
-    createdAt: new Date()
-  });
-
-  alert("Account created!");
-  window.location.href = "login.html";
 };
 </script>
+
+</body>
+</html>
