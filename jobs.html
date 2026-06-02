@@ -1,21 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Details</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h2>WorkMarket</h2>
+  <nav id="navbar"></nav>
+</header>
+
+<main class="jobs" id="jobContainer">
+  <div class="job-card" id="jobDetails">
+    Loading job...
+  </div>
+</main>
+
 <script type="module">
+import { initAuth, currentUser, logout } from "./auth.js";
 import { db } from "./firebase.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const jobList = document.getElementById("jobList");
+const navbar = document.getElementById("navbar");
+const jobBox = document.getElementById("jobDetails");
 
-const snap = await getDocs(collection(db, "jobs"));
+// NAVBAR (same system as your homepage)
+initAuth(() => {
 
-snap.forEach(doc => {
-  const job = doc.data();
+  if (!currentUser) {
+    navbar.innerHTML = `
+      <a href="index.html">Jobs</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Sign Up</a>
+    `;
+  } else if (currentUser.role === "employer") {
+    navbar.innerHTML = `
+      <a href="index.html">Jobs</a>
+      <a href="post-job.html">Post Job</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="#" id="logout">Logout</a>
+    `;
+  } else {
+    navbar.innerHTML = `
+      <a href="index.html">Jobs</a>
+      <a href="dashboard.html">My Applications</a>
+      <a href="#" id="logout">Logout</a>
+    `;
+  }
 
-  jobList.innerHTML += `
-    <div class="job-card">
-      <h3>${job.title}</h3>
-      <p>${job.type} • ${job.rate}</p>
-      <p>${job.desc}</p>
-      <a href="apply.html" class="btn">Apply</a>
-    </div>
-  `;
+  document.getElementById("logout")?.addEventListener("click", async () => {
+    await logout();
+    location.reload();
+  });
 });
+
+// GET JOB ID FROM URL
+const params = new URLSearchParams(window.location.search);
+const jobId = params.get("id");
+
+async function loadJob() {
+  if (!jobId) {
+    jobBox.innerHTML = "<p>Job not found.</p>";
+    return;
+  }
+
+  const ref = doc(db, "jobs", jobId);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    jobBox.innerHTML = "<p>Job does not exist.</p>";
+    return;
+  }
+
+  const job = snap.data();
+
+  jobBox.innerHTML = `
+    <h3 style="color:#14a800;">${job.title}</h3>
+
+    <div class="job-meta">
+      <b>Company:</b> ${job.company || "Private"} <br>
+      <b>Location:</b> ${job.location || "Remote"} <br>
+      <b>Type:</b> ${job.type || "Full-time"} <br>
+      <b>Salary:</b> ${job.salary || "Not specified"}
+    </div>
+
+    <hr>
+
+    <p style="font-size:14px; line-height:1.6;">
+      ${job.description}
+    </p>
+
+    <hr>
+
+    <div style="font-size:13px; color:#666;">
+      Posted by: ${job.postedBy || "Employer"}
+    </div>
+
+    <br>
+
+    <button class="btn" id="applyBtn">
+      Apply for this Job
+    </button>
+  `;
+
+  // APPLY BUTTON (placeholder for next step)
+  document.getElementById("applyBtn").onclick = () => {
+    alert("Next step: Application system (we will build this next 🚀)");
+  };
+}
+
+loadJob();
 </script>
+
+</body>
+</html>
