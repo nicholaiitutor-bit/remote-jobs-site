@@ -5,136 +5,108 @@ body {
   color: #222;
 }
 
-/* HEADER */
+/* TOP NAV (Upwork style) */
 header {
-  background: #0a66c2;
-  color: white;
-  padding: 14px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 header h2 {
+  color: #14a800;
   margin: 0;
-  font-size: 18px;
 }
 
+/* NAV LINKS */
 nav a {
-  color: white;
-  text-decoration: none;
   margin-left: 15px;
-  font-size: 14px;
+  text-decoration: none;
+  color: #333;
   font-weight: 600;
-  opacity: 0.9;
+  font-size: 14px;
 }
 
 nav a:hover {
-  opacity: 1;
+  color: #14a800;
 }
 
-/* HERO */
+/* HERO (Upwork clean style) */
 .hero {
   background: white;
-  padding: 50px 20px;
+  padding: 40px 20px;
   text-align: center;
+  border-bottom: 1px solid #eee;
 }
 
 .hero h1 {
-  font-size: 34px;
+  font-size: 32px;
   margin-bottom: 10px;
 }
 
-.hero p {
-  color: #666;
+/* SEARCH BAR */
+.search-box {
+  max-width: 700px;
+  margin: 15px auto;
+  display: flex;
 }
 
-/* BUTTON */
-.btn {
-  display: inline-block;
-  background: #0a66c2;
-  color: white;
-  padding: 8px 14px;
+.search-box input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
   border-radius: 6px;
-  text-decoration: none;
-  font-size: 13px;
-  margin-top: 8px;
 }
 
-.btn:hover {
-  background: #084c91;
-}
-
-/* MARKETPLACE LAYOUT */
+/* JOB GRID (Upwork cards layout) */
 .jobs {
   max-width: 1100px;
   margin: auto;
   padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 15px;
 }
 
-/* JOB LIST ITEM (ONLINEJOBS STYLE) */
-.job-item,
+/* JOB CARD */
 .job-card {
   background: white;
-  padding: 14px 16px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  border-left: 4px solid #0a66c2;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #eee;
   transition: 0.2s;
 }
 
-.job-item:hover,
 .job-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: #14a800;
 }
 
-.job-item h3,
 .job-card h3 {
   margin: 0;
   font-size: 16px;
-  color: #0a66c2;
+  color: #14a800;
 }
 
 .job-meta {
-  font-size: 13px;
+  font-size: 12px;
   color: #666;
-  margin-top: 4px;
+  margin: 6px 0;
 }
 
-/* INPUTS */
-input, select, textarea {
-  font-family: inherit;
-  font-size: 14px;
-}
-
-/* SIDEBAR (for jobs page if used) */
-.container {
-  display: flex;
-  gap: 20px;
-}
-
-.sidebar {
-  width: 250px;
-  background: white;
-  padding: 15px;
-  border-radius: 6px;
-  height: fit-content;
-}
-
-.sidebar input,
-.sidebar select {
-  width: 100%;
-  padding: 8px;
-  margin-top: 8px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-/* FOOTER */
-footer {
-  text-align: center;
-  padding: 20px;
-  background: #0a66c2;
+.btn {
+  display: inline-block;
+  margin-top: 10px;
+  background: #14a800;
   color: white;
-  margin-top: 40px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.btn:hover {
+  background: #0e7a00;
 }
