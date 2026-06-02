@@ -1,14 +1,46 @@
-<header style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid #ddd;background:#fff;">
-  
-  <h2 style="margin:0;color:#14a800;font-size:18px;">
-    Remote Work Hub PH
-  </h2>
+<script>
+const user = JSON.parse(localStorage.getItem("currentUser"));
+</script>
 
-  <nav>
-    <a href="index.html" style="margin-right:10px;text-decoration:none;">Home</a>
-    <a href="jobs.html" style="margin-right:10px;text-decoration:none;">Jobs</a>
-    <a href="login.html" style="margin-right:10px;text-decoration:none;">Login</a>
-    <a href="signup.html" style="text-decoration:none;">Sign Up</a>
-  </nav>
+<header>
+  <h2>Remote Work Hub PH</h2>
 
+  <nav id="navbar"></nav>
 </header>
+
+<script>
+function renderNav() {
+  const nav = document.getElementById("navbar");
+
+  if (!user) {
+    nav.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Sign Up</a>
+    `;
+  } else if (user.role === "employer") {
+    nav.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="post-job.html">Post Job</a>
+      <a href="employer-dashboard.html">Dashboard</a>
+      <a href="#" onclick="logout()">Logout</a>
+    `;
+  } else {
+    nav.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="freelancer-dashboard.html">My Applications</a>
+      <a href="#" onclick="logout()">Logout</a>
+    `;
+  }
+}
+
+function logout() {
+  localStorage.removeItem("currentUser");
+  window.location.href = "index.html";
+}
+
+renderNav();
+</script>
