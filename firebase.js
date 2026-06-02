@@ -1,6 +1,6 @@
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAs5VqodQCgH-F-VYbM1zS2BzsoHOQGpzo",
@@ -12,6 +12,35 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+const container = document.getElementById("jobList") || document.getElementById("jobContainer");
+
+async function load() {
+  try {
+    const snap = await getDocs(collection(db, "jobs"));
+
+    let html = "";
+
+    snap.forEach(doc => {
+      const job = doc.data();
+
+      html += `
+        <div style="border:1px solid #ddd; padding:10px; margin:10px;">
+          <h3>${job.title || "No title"}</h3>
+          <p>${job.type || ""} - ${job.rate || ""}</p>
+          <p>${job.desc || ""}</p>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html || "<p>No jobs found</p>";
+
+  } catch (e) {
+    console.log(e);
+    container.innerHTML = "<p style='color:red'>Firebase error loading jobs</p>";
+  }
+}
+
+load();
+</script>
