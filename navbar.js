@@ -6,25 +6,38 @@ export function loadNavbar() {
   initAuth(() => {
     if (!navbar) return;
 
+    // =========================
+    // GUEST USER (OLJ STYLE SIMPLE)
+    // =========================
     if (!currentUser) {
       navbar.innerHTML = `
         <a href="index.html">Home</a>
         <a href="jobs.html">Jobs</a>
         <a href="login.html">Login</a>
-        <a href="signup.html">Sign Up</a>
+        <a href="signup.html" class="nav-btn">Sign Up</a>
       `;
-    } else if (currentUser.role === "employer") {
+    }
+
+    // =========================
+    // EMPLOYER DASHBOARD NAV
+    // =========================
+    else if (currentUser.role === "employer") {
       navbar.innerHTML = `
         <a href="index.html">Home</a>
-        <a href="jobs.html">Jobs</a>
-        <a href="post-job.html">Post Job</a>
+        <a href="jobs.html">Browse Jobs</a>
+        <a href="post-job.html" class="nav-btn">Post Job</a>
         <a href="employer-dashboard.html">Dashboard</a>
         <a href="#" id="logout">Logout</a>
       `;
-    } else {
+    }
+
+    // =========================
+    // FREELANCER NAV
+    // =========================
+    else {
       navbar.innerHTML = `
         <a href="index.html">Home</a>
-        <a href="jobs.html">Jobs</a>
+        <a href="jobs.html">Find Jobs</a>
         <a href="freelancer-dashboard.html">My Applications</a>
         <a href="#" id="logout">Logout</a>
       `;
