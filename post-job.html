@@ -1,33 +1,53 @@
 <script type="module">
-import { initAuth, currentUser } from "./auth.js";
 import { db } from "./firebase.js";
-import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-initAuth(() => {
+window.addEventListener("DOMContentLoaded", () => {
 
-  if (!currentUser) {
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+
+  if (!user) {
     alert("Login first");
-    location.href = "login.html";
+    window.location.href = "login.html";
+    return;
   }
 
-  if (currentUser.role !== "employer") {
+  if (user.role !== "employer") {
     alert("Only employers can post jobs");
-    location.href = "index.html";
+    window.location.href = "index.html";
+    return;
   }
+
+  window.postJob = async function () {
+
+    const title = document.getElementById("title").value;
+    const rate = document.getElementById("rate").value;
+    const type = document.getElementById("type").value;
+    const desc = document.getElementById("desc").value;
+
+    try {
+      await addDoc(collection(db, "jobs"), {
+
+        title,
+        rate,
+        type,
+        description: desc,
+
+        employerId: user.uid,
+        employerName: user.name,
+
+        createdAt: serverTimestamp()
+      });
+
+      alert("Job posted successfully!");
+      window.location.href = "employer-dashboard.html";
+
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
+  };
+
 });
-
-window.postJob = async function () {
-
-  await addDoc(collection(db, "jobs"), {
-    title: title.value,
-    rate: rate.value,
-    type: type.value,
-    desc: desc.value,
-    createdBy: currentUser.uid,
-    createdAt: new Date()
-  });
-
-  alert("Job posted!");
-  location.href = "jobs.html";
-};
 </script>
