@@ -1,58 +1,7 @@
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up - Remote Work Hub PH</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<header>
-  <h2>Remote Work Hub PH</h2>
-</header>
-
-<section class="hero">
-
-  <h1>Create Your Account</h1>
-  <p>Join as an employer or job seeker</p>
-
-  <div class="job-card" style="max-width:400px; margin:auto;">
-
-```
-<input id="name" placeholder="Full Name" style="width:100%; padding:10px; margin:5px 0;">
-
-<input id="email" type="email" placeholder="Email" style="width:100%; padding:10px; margin:5px 0;">
-
-<input id="password" type="password" placeholder="Password" style="width:100%; padding:10px; margin:5px 0;">
-
-<select id="role" style="width:100%; padding:10px; margin:5px 0;">
-  <option value="">Select Role</option>
-  <option value="employer">Employer</option>
-  <option value="jobseeker">Job Seeker</option>
-</select>
-
-<button class="btn" onclick="signupUser()">Sign Up</button>
-```
-
-  </div>
-
-</section>
-
 <script type="module">
-
 import { auth, db } from "./firebase.js";
-
-import {
-  createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-import {
-  doc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 window.signupUser = async function () {
 
@@ -62,39 +11,20 @@ window.signupUser = async function () {
   const role = document.getElementById("role").value;
 
   if (!name || !email || !password || !role) {
-    alert("Please fill all fields!");
+    alert("Fill all fields");
     return;
   }
 
-  try {
+  const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+  await setDoc(doc(db, "users", userCred.user.uid), {
+    name,
+    email,
+    role,
+    createdAt: new Date()
+  });
 
-    await setDoc(
-      doc(db, "users", userCredential.user.uid),
-      {
-        name,
-        email,
-        role,
-        createdAt: new Date()
-      }
-    );
-
-    alert("Account created successfully!");
-
-    window.location.href = "login.html";
-
-  } catch (error) {
-    alert(error.message);
-  }
-
+  alert("Account created!");
+  window.location.href = "login.html";
 };
-
 </script>
-
-</body>
-</html>
