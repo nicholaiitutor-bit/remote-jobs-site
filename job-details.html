@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Job Details</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -10,80 +8,93 @@
 <body>
 
 <header>
-  <h2>Remote Work Hub PH</h2>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="jobs.html">Jobs</a>
-  </nav>
+  <h2 class="logo">WorkMarket</h2>
+  <nav id="navbar"></nav>
 </header>
 
-<section class="jobs">
-
-  <div id="jobContainer">
-    <p>Loading job...</p>
-  </div>
-
-</section>
-
-<footer>
-  <p>© 2026 Remote Work Hub PH</p>
-</footer>
+<main class="jobs">
+  <div class="job-card" id="jobBox">Loading...</div>
+  <div id="applyBox"></div>
+</main>
 
 <script type="module">
+import { loadNavbar } from "./navbar.js";
+loadNavbar();
+</script>
 
+<script type="module">
 import { db } from "./firebase.js";
+import { currentUser } from "./auth.js";
 import {
-  doc,
-  getDoc
+  doc, getDoc, addDoc, collection, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* GET ID FROM URL */
-const params = new URLSearchParams(window.location.search);
-const jobId = params.get("id");
+const id = new URLSearchParams(location.search).get("id");
+const jobBox = document.getElementById("jobBox");
+const applyBox = document.getElementById("applyBox");
 
-const container = document.getElementById("jobContainer");
+let jobData;
 
 async function loadJob() {
+  const snap = await getDoc(doc(db, "jobs", id));
 
-  if (!jobId) {
-    container.innerHTML = "<p>Job not found.</p>";
+  jobData = snap.data();
+
+  jobBox.innerHTML = `
+    <h3>${jobData.title}</h3>
+    <div class="job-meta">
+      ${jobData.company || "Private"} • ${jobData.location}
+    </div>
+    <p>${jobData.description}</p>
+  `;
+
+  renderApply();
+}
+
+function renderApply() {
+
+  if (!currentUser) {
+    applyBox.innerHTML = `<p>Please login to apply.</p>`;
     return;
   }
 
-  const snap = await getDoc(doc(db, "jobs", jobId));
-
-  if (!snap.exists()) {
-    container.innerHTML = "<p>Job does not exist.</p>";
+  if (currentUser.role !== "freelancer") {
+    applyBox.innerHTML = `<p>Only freelancers can apply.</p>`;
     return;
   }
 
-  const job = snap.data();
-
-  container.innerHTML = `
+  applyBox.innerHTML = `
     <div class="job-card">
+      <h3>Apply for this Job</h3>
 
-      <h1>${job.title}</h1>
+      <textarea id="cover" placeholder="Cover letter"
+        style="width:100%; height:120px; margin-top:10px;"></textarea>
 
-      <p><b>Type:</b> ${job.type}</p>
-      <p><b>Rate:</b> ${job.rate}</p>
+      <input id="rate" placeholder="Rate (e.g $5/hr)"
+        style="width:100%; padding:10px; margin-top:10px;">
 
-      <hr>
-
-      <p style="margin-top:10px;">
-        ${job.desc}
-      </p>
-
-      <br>
-
-      <a href="apply.html" class="btn">Apply Now</a>
-
+      <button class="btn" id="submit">Submit Application</button>
     </div>
   `;
 
+  document.getElementById("submit").onclick = async () => {
+
+    await addDoc(collection(db, "applications"), {
+      jobId: id,
+      jobTitle: jobData.title,
+      applicantId: currentUser.uid,
+      applicantName: currentUser.name,
+      coverLetter: document.getElementById("cover").value,
+      rate: document.getElementById("rate").value,
+      status: "pending",
+      createdAt: serverTimestamp()
+    });
+
+    alert("Application sent!");
+  };
 }
 
 loadJob();
-
 </script>
 
 </body>
