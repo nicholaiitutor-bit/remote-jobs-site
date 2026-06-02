@@ -1,29 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Jobs Marketplace</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Jobs Marketplace</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>
-  <h2>WorkMarket</h2>
+<!-- TOP NAVIGATION (OLJ PH STYLE) -->
+<header class="topbar">
+  <div class="logo">OnlineJobs</div>
+
   <nav id="navbar"></nav>
 </header>
 
+<!-- HERO / SEARCH AREA -->
 <section class="hero">
-  <h1>Find Top Freelance & Remote Jobs</h1>
-  <p>Hire talent or get hired instantly</p>
+  <h1>Find Remote Jobs That Fit You</h1>
+  <p>Work from home opportunities for freelancers & professionals</p>
 
   <div class="search-box">
-    <input id="searchInput" placeholder="Search jobs (designer, VA, developer...)">
+    <input id="searchInput" placeholder="Search jobs, skills, companies...">
   </div>
 </section>
 
+<!-- FILTER BAR (OLJ STYLE SIMPLE FILTERS) -->
+<section class="filters">
+  <select id="filterType">
+    <option value="">All Types</option>
+    <option value="Full-time">Full-time</option>
+    <option value="Part-time">Part-time</option>
+    <option value="Freelance">Freelance</option>
+  </select>
+
+  <select id="filterLocation">
+    <option value="">All Locations</option>
+    <option value="Remote">Remote</option>
+    <option value="USA">USA</option>
+    <option value="Philippines">Philippines</option>
+  </select>
+</section>
+
+<!-- JOB LIST -->
 <main class="jobs" id="jobList"></main>
 
-<!-- NAV AUTH -->
+<!-- NAV SCRIPT -->
 <script type="module">
 import { initAuth, currentUser, logout } from "./auth.js";
 
@@ -33,20 +57,23 @@ initAuth(() => {
 
   if (!currentUser) {
     navbar.innerHTML = `
-      <a href="index.html">Find Jobs</a>
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
       <a href="login.html">Login</a>
       <a href="signup.html">Sign Up</a>
     `;
-  } else if (currentUser.role === "employer") {
+  } 
+  else if (currentUser.role === "employer") {
     navbar.innerHTML = `
-      <a href="index.html">Find Talent</a>
+      <a href="index.html">Home</a>
       <a href="post-job.html">Post Job</a>
       <a href="dashboard.html">Dashboard</a>
       <a href="#" id="logout">Logout</a>
     `;
-  } else {
+  } 
+  else {
     navbar.innerHTML = `
-      <a href="index.html">Jobs</a>
+      <a href="index.html">Home</a>
       <a href="dashboard.html">My Applications</a>
       <a href="#" id="logout">Logout</a>
     `;
@@ -59,33 +86,61 @@ initAuth(() => {
 });
 </script>
 
-<!-- FIREBASE JOB FEED -->
+<!-- FIREBASE JOB LOAD + FILTER -->
 <script type="module">
 import { db } from "./firebase.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const jobList = document.getElementById("jobList");
+
+let allJobs = [];
 
 async function loadJobs() {
   const snap = await getDocs(collection(db, "jobs"));
 
-  jobList.innerHTML = "";
+  allJobs = [];
 
   snap.forEach(doc => {
-    const j = doc.data();
+    allJobs.push({ id: doc.id, ...doc.data() });
+  });
 
+  renderJobs(allJobs);
+}
+
+function renderJobs(jobs) {
+  jobList.innerHTML = "";
+
+  jobs.forEach(job => {
     jobList.innerHTML += `
       <div class="job-card">
-        <h3>${j.title}</h3>
+        <h3>${job.title}</h3>
+
         <div class="job-meta">
-          ${j.company || "Private"} • ${j.location || "Remote"} • ${j.type || "Full-time"}
+          ${job.company || "Private"} • ${job.location || "Remote"} • ${job.type || ""}
         </div>
-        <p>${(j.description || "").slice(0, 90)}...</p>
-        <a class="btn" href="job.html?id=${doc.id}">View Job</a>
+
+        <p>${(job.description || "").slice(0, 100)}...</p>
+
+        <a class="btn" href="job.html?id=${job.id}">View Job</a>
       </div>
     `;
   });
 }
+
+// SEARCH FILTER
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  const val = e.target.value.toLowerCase();
+
+  const filtered = allJobs.filter(j =>
+    j.title?.toLowerCase().includes(val) ||
+    j.description?.toLowerCase().includes(val)
+  );
+
+  renderJobs(filtered);
+});
 
 loadJobs();
 </script>
