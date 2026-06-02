@@ -14,7 +14,6 @@
       background: #f4f6f9;
     }
 
-    /* HEADER (OLJ STYLE) */
     header {
       display: flex;
       justify-content: space-between;
@@ -42,7 +41,6 @@
       color: #14a800;
     }
 
-    /* HERO (OLJ STYLE CENTERED) */
     .hero {
       text-align: center;
       padding: 60px 20px 40px;
@@ -69,7 +67,6 @@
       border-radius: 6px;
     }
 
-    /* BUTTON */
     .btn {
       display: inline-block;
       padding: 10px 14px;
@@ -85,7 +82,6 @@
       background: #28a745;
     }
 
-    /* JOB SECTION */
     .jobs {
       max-width: 800px;
       margin: auto;
@@ -122,95 +118,151 @@
 
 <body>
 
-<!-- HEADER -->
 <header>
   <h2>Remote Work Hub PH</h2>
 
-  <nav id="navbar">
-    <a href="index.html">Home</a>
-    <a href="jobs.html">Jobs</a>
-    <a href="login.html">Login</a>
-    <a href="signup.html">Sign Up</a>
-  </nav>
+  <!-- Dynamic Navbar -->
+  <nav id="navbar"></nav>
 </header>
 
-<!-- HERO -->
 <section class="hero">
-  <h1>Find Trusted Remote Jobs in the Philippines</h1>
-  <p>Work from home opportunities for Filipino freelancers</p>
 
-  <input type="text" placeholder="Search jobs..." onkeyup="goSearch(this.value)">
+  <h1>Find Trusted Remote Jobs in the Philippines</h1>
+
+  <p>
+    Work from home opportunities for Filipino freelancers
+  </p>
+
+  <input
+    type="text"
+    placeholder="Search jobs..."
+    onkeyup="goSearch(this.value)"
+  >
 
   <br>
 
-  <a href="jobs.html" class="btn">Browse Jobs</a>
-  <a href="post-job.html" class="btn secondary">Post a Job</a>
+  <a href="jobs.html" class="btn">
+    Browse Jobs
+  </a>
+
+  <a href="post-job.html" class="btn secondary">
+    Post a Job
+  </a>
+
 </section>
 
-<!-- FEATURED JOBS -->
 <section class="jobs">
-  <h2 style="text-align:center;">Featured Jobs</h2>
-  <div id="featuredJobs">Loading jobs...</div>
+
+  <h2 style="text-align:center;">
+    Featured Jobs
+  </h2>
+
+  <div id="featuredJobs">
+    Loading jobs...
+  </div>
+
 </section>
 
 <footer>
   © 2026 Remote Work Hub PH
 </footer>
 
-<!-- FIREBASE -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAs5VqodQCgH-F-VYbM1zS2BzsoHOQGpzo",
-  authDomain: "remote-work-hub-211d8.firebaseapp.com",
-  projectId: "remote-work-hub-211d8",
-  storageBucket: "remote-work-hub-211d8.firebasestorage.app",
-  messagingSenderId: "697750475671",
-  appId: "1:697750475671:web:6e609411ae003e6500aad2"
-};
+import { db } from "./firebase.js";
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import {
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const container = document.getElementById("featuredJobs");
+const container =
+  document.getElementById("featuredJobs");
 
 async function loadJobs() {
-  const snap = await getDocs(collection(db, "jobs"));
 
-  let html = "";
-  let count = 0;
+  try {
 
-  snap.forEach(doc => {
-    if (count < 3) {
-      const job = doc.data();
+    const snap =
+      await getDocs(collection(db, "jobs"));
 
-      html += `
-        <div class="job-card">
-          <h3>${job.title || "No title"}</h3>
-          <p><b>${job.type || ""}</b> • ${job.rate || ""}</p>
-          <p>${(job.description || "").substring(0, 80)}...</p>
-          <a href="job.html?id=${doc.id}" class="btn">View Job</a>
-        </div>
-      `;
+    let html = "";
+    let count = 0;
 
-      count++;
+    snap.forEach((doc) => {
+
+      if (count < 3) {
+
+        const job = doc.data();
+
+        html += `
+          <div class="job-card">
+
+            <h3>
+              ${job.title || "Untitled Job"}
+            </h3>
+
+            <p>
+              <b>${job.type || ""}</b>
+              •
+              ${job.rate || ""}
+            </p>
+
+            <p>
+              ${(job.description || "")
+                .substring(0, 100)}
+            </p>
+
+            <a
+              href="job-details.html?id=${doc.id}"
+              class="btn"
+            >
+              View Job
+            </a>
+
+          </div>
+        `;
+
+        count++;
+
+      }
+
+    });
+
+    if (html === "") {
+      html = "<p>No jobs available yet.</p>";
     }
-  });
 
-  container.innerHTML = html || "<p>No jobs yet.</p>";
+    container.innerHTML = html;
+
+  } catch (error) {
+
+    console.error(error);
+
+    container.innerHTML =
+      "<p>Unable to load jobs.</p>";
+
+  }
+
 }
 
 loadJobs();
 
-/* SEARCH */
-window.goSearch = function(val) {
-  if (val.length > 2) {
-    window.location.href = "jobs.html";
+window.goSearch = function(value) {
+
+  if (value.length > 2) {
+
+    window.location.href =
+      "jobs.html";
+
   }
+
 };
+
 </script>
+
+<!-- Dynamic Navbar -->
+<script type="module" src="navbar.js"></script>
 
 </body>
 </html>
