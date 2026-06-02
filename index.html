@@ -1,73 +1,195 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
 <head>
-  <title>WorkMarket</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Work Hub PH</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .job-card{
+      padding:15px;
+      margin:10px auto;
+      border:1px solid #ddd;
+      border-radius:10px;
+      max-width:600px;
+      background:#fff;
+    }
+
+    .hero{
+      text-align:center;
+      padding:40px 20px;
+    }
+
+    .btn{
+      display:inline-block;
+      padding:10px 15px;
+      margin-top:10px;
+      background:#007bff;
+      color:white;
+      text-decoration:none;
+      border-radius:6px;
+    }
+  </style>
+
 </head>
 
 <body>
 
 <header>
-  <h2 class="logo">WorkMarket</h2>
+  <h2>Remote Work Hub PH</h2>
   <nav id="navbar"></nav>
 </header>
 
 <section class="hero">
-  <h1>Find Remote Jobs Fast</h1>
-  <p>OLJ PH style marketplace for freelancers</p>
 
-  <div class="search-box">
-    <input id="searchInput" placeholder="Search jobs...">
-  </div>
+  <h1>Find Trusted Remote Jobs in the Philippines</h1>
+  <p>Work from home opportunities for Filipino freelancers</p>
+
+<a href="jobs.html" class="btn">Browse Jobs</a> <a href="post-job.html" class="btn" style="background:#28a745;">Post a Job</a>
+
+<br><br>
+
+<input
+type="text"
+placeholder="Search jobs..."
+onkeyup="goSearch(this.value)"
+style="padding:10px; width:60%; border:1px solid #ccc; border-radius:6px;"
+
+>
+
 </section>
 
-<main class="jobs" id="jobList"></main>
+<section class="jobs">
+
+  <h2 style="text-align:center;">Featured Jobs</h2>
+
+  <div id="featuredJobs">
+    <p style="text-align:center;">Loading jobs...</p>
+  </div>
+
+</section>
+
+<footer style="text-align:center; padding:20px;">
+  © 2026 Remote Work Hub PH
+</footer>
 
 <script type="module">
-import { loadNavbar } from "./navbar.js";
-loadNavbar();
-</script>
 
-<script type="module">
-import { db } from "./firebase.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const jobList = document.getElementById("jobList");
-let jobs = [];
+/* FIREBASE CONFIG */
+const firebaseConfig = {
+  apiKey: "AIzaSyAs5VqodQCgH-F-VYbM1zS2BzsoHOQGpzo",
+  authDomain: "remote-work-hub-211d8.firebaseapp.com",
+  projectId: "remote-work-hub-211d8",
+  storageBucket: "remote-work-hub-211d8.firebasestorage.app",
+  messagingSenderId: "697750475671",
+  appId: "1:697750475671:web:6e609411ae003e6500aad2"
+};
 
-async function loadJobs() {
-  const snap = await getDocs(collection(db, "jobs"));
+let app, db;
 
-  jobs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  render(jobs);
+try {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+} catch (e) {
+  console.log("Firebase error:", e);
 }
 
-function render(list) {
-  jobList.innerHTML = "";
+/* NAVIGATION (SAFE) */
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+const navbar = document.getElementById("navbar");
 
-  list.forEach(j => {
-    jobList.innerHTML += `
-      <div class="job-card">
-        <h3>${j.title}</h3>
-        <div class="job-meta">
-          ${j.company || "Private"} • ${j.location || "Remote"}
-        </div>
-        <p>${(j.description || "").slice(0, 100)}...</p>
-        <a class="btn" href="job.html?id=${j.id}">View Job</a>
-      </div>
+function renderNav() {
+  if (!navbar) return;
+
+  if (!currentUser) {
+    navbar.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Sign Up</a>
     `;
-  });
+  } 
+  else if (currentUser.role === "employer") {
+    navbar.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="post-job.html">Post Job</a>
+      <a href="employer-dashboard.html">Dashboard</a>
+      <a href="#" onclick="logout()">Logout</a>
+    `;
+  } 
+  else {
+    navbar.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="#" onclick="logout()">Logout</a>
+    `;
+  }
 }
 
-// SEARCH
-document.addEventListener("input", (e) => {
-  if (e.target.id === "searchInput") {
-    const val = e.target.value.toLowerCase();
-    render(jobs.filter(j => j.title?.toLowerCase().includes(val)));
+window.logout = function () {
+  localStorage.removeItem("currentUser");
+  window.location.href = "index.html";
+};
+
+renderNav();
+
+/* LOAD JOBS (SAFE FALLBACK) */
+async function loadJobs() {
+  const container = document.getElementById("featuredJobs");
+
+  if (!db) {
+    container.innerHTML = "<p>Firebase not loaded.</p>";
+    return;
   }
-});
+
+  try {
+    const snap = await getDocs(collection(db, "jobs"));
+
+    let html = "";
+    let count = 0;
+
+    snap.forEach(doc => {
+      if (count < 3) {
+        const job = doc.data();
+
+        html += `
+          <div class="job-card">
+            <h3>${job.title || "No title"}</h3>
+            <p><b>${job.type || ""}</b> • ${job.rate || ""}</p>
+            <p>${job.desc ? job.desc.substring(0, 80) : ""}...</p>
+            <a href="jobs.html" class="btn">View Jobs</a>
+          </div>
+        `;
+
+        count++;
+      }
+    });
+
+    container.innerHTML =
+      count ? html : "<p style='text-align:center;'>No jobs yet.</p>";
+
+  } catch (err) {
+    console.log(err);
+    document.getElementById("featuredJobs").innerHTML =
+      "<p style='text-align:center;'>Failed to load jobs.</p>";
+  }
+}
 
 loadJobs();
+
+/* SEARCH */
+window.goSearch = function(value) {
+  if (value.length > 2) {
+    window.location.href = "jobs.html";
+  }
+};
+
 </script>
 
 </body>
