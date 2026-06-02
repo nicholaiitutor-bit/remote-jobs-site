@@ -1,110 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employer Dashboard - Remote Work Hub PH</title>
+  <title>Employer Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header>
-  <h2>Employer Dashboard</h2>
-
+  <h2>Remote Work Hub PH</h2>
   <nav>
     <a href="index.html">Home</a>
     <a href="jobs.html">Jobs</a>
     <a href="post-job.html">Post Job</a>
-    <a href="login.html">Login</a>
     <a href="employer-dashboard.html">Dashboard</a>
   </nav>
 </header>
 
 <section class="jobs">
+  <h2>Employer Dashboard</h2>
 
-  <h1>My Posted Jobs</h1>
-  <p>Manage your job listings</p>
+  <p>Welcome employer 👋</p>
 
-  <div id="myJobs"></div>
-
+  <div id="myJobs">Loading your jobs...</div>
 </section>
-
-<footer>
-  <p>© 2026 Remote Work Hub PH</p>
-</footer>
-
-<!-- FIREBASE -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-/* 🔥 FIREBASE CONFIG */
-const firebaseConfig = {
-  apiKey: "AIzaSyAs5VqodQCgH-F-VYbM1zS2BzsoHOQGpzo",
-  authDomain: "remote-work-hub-211d8.firebaseapp.com",
-  projectId: "remote-work-hub-211d8",
-  storageBucket: "remote-work-hub-211d8.firebasestorage.app",
-  messagingSenderId: "697750475671",
-  appId: "1:697750475671:web:6e609411ae003e6500aad2"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-/* GET CURRENT USER */
-const user = JSON.parse(localStorage.getItem("loggedInUser"));
-
-if (!user) {
-  alert("Please login first!");
-  window.location.href = "login.html";
-}
-
-/* LOAD ONLY USER JOBS */
-async function loadMyJobs() {
-  const snapshot = await getDocs(collection(db, "jobs"));
-
-  let html = "";
-
-  snapshot.forEach((d) => {
-    let job = d.data();
-
-    // only show jobs created by this employer
-    if (job.createdBy === user.name) {
-
-      html += `
-        <div class="job-card">
-          <h3>${job.title}</h3>
-          <p><b>${job.type}</b> • ${job.rate}</p>
-          <p>${job.desc}</p>
-
-          <button onclick="deleteJob('${d.id}')" class="btn" style="background:red;">
-            Delete
-          </button>
-        </div>
-      `;
-    }
-  });
-
-  if (!html) {
-    html = "<p>No jobs posted yet.</p>";
-  }
-
-  document.getElementById("myJobs").innerHTML = html;
-}
-
-/* DELETE JOB */
-window.deleteJob = async function(id) {
-  if (!confirm("Delete this job?")) return;
-
-  await deleteDoc(doc(db, "jobs", id));
-
-  alert("Job deleted!");
-  loadMyJobs();
-};
-
-loadMyJobs();
-</script>
 
 </body>
 </html>
