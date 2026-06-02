@@ -9,6 +9,8 @@
 
 <header>
   <h2>Remote Work Hub PH</h2>
+
+  <!-- SAME NAV SYSTEM AS INDEX -->
   <nav id="navbar"></nav>
 </header>
 
@@ -17,43 +19,78 @@
 
   <a href="post-job.html" class="btn">+ Post New Job</a>
 
-  <div id="myJobs"></div>
+  <div id="myJobs">Loading...</div>
 </section>
 
 <script type="module">
-import { renderNav } from "./nav.js";
+
 import { db } from "./firebase.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-renderNav();
+/* NAVBAR (SAME AS INDEX) */
+import "./navbar.js";
 
-const user = JSON.parse(localStorage.getItem("currentUser"));
+/* GET CURRENT USER FROM FIREBASE AUTH (NOT LOCALSTORAGE) */
+import { auth } from "./firebase.js";
+
 const container = document.getElementById("myJobs");
 
 async function loadMyJobs() {
-  const snap = await getDocs(collection(db, "jobs"));
 
-  let html = "";
+  const user = auth.currentUser;
 
-  snap.forEach(doc => {
-    const job = doc.data();
+  if (!user) {
+    container.innerHTML = "<p>Please login again.</p>";
+    return;
+  }
 
-    if (job.employerId === user.uid) {
-      html += `
-        <div class="job-card">
-          <h3>${job.title}</h3>
-          <p>${job.type} • ${job.rate}</p>
-          <p>${job.description?.substring(0, 100)}</p>
-        </div>
-      `;
-    }
-  });
+  try {
 
-  container.innerHTML = html || "<p>No jobs posted yet.</p>";
+    const snap = await getDocs(collection(db, "jobs"));
+
+    let html = "";
+
+    snap.forEach((doc) => {
+
+      const job = doc.data();
+
+      if (job.employerId === user.uid) {
+
+        html += `
+          <div class="job-card">
+            <h3>${job.title}</h3>
+            <p>${job.type} • ${job.rate}</p>
+            <p>${(job.description || "").substring(0, 100)}</p>
+          </div>
+        `;
+
+      }
+
+    });
+
+    container.innerHTML =
+      html || "<p>No jobs posted yet.</p>";
+
+  } catch (err) {
+
+    console.error(err);
+
+    container.innerHTML =
+      "<p>Error loading jobs.</p>";
+
+  }
+
 }
 
 loadMyJobs();
+
 </script>
+
+<!-- SINGLE NAVBAR SYSTEM ONLY -->
+<script type="module" src="navbar.js"></script>
 
 </body>
 </html>
