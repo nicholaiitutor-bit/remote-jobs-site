@@ -23,31 +23,15 @@
 <section class="hero">
 
   <h1>Login</h1>
-  <p>Access your account</p>
 
   <div class="job-card" style="max-width:400px; margin:auto;">
 
 ```
-<input
-  type="email"
-  id="email"
-  placeholder="Email"
-  style="width:100%; padding:10px; margin:5px 0;"
->
+<input type="email" id="email" placeholder="Email" style="width:100%; padding:10px; margin:5px 0;">
 
-<input
-  type="password"
-  id="password"
-  placeholder="Password"
-  style="width:100%; padding:10px; margin:5px 0;"
->
+<input type="password" id="password" placeholder="Password" style="width:100%; padding:10px; margin:5px 0;">
 
-<button
-  onclick="login()"
-  class="btn"
->
-  Login
-</button>
+<button class="btn" onclick="login()">Login</button>
 ```
 
   </div>
@@ -69,58 +53,45 @@ import {
 
 window.login = async function () {
 
-  const email =
-    document.getElementById("email").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-  const password =
-    document.getElementById("password").value;
+  if (!email || !password) {
+    alert("Please fill all fields!");
+    return;
+  }
 
   try {
 
-    const userCredential =
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-    const userDoc =
-      await getDoc(
-        doc(
-          db,
-          "users",
-          userCredential.user.uid
-        )
-      );
-
-    const userData =
-      userDoc.data();
-
-    localStorage.setItem(
-      "currentUser",
-      JSON.stringify({
-        uid: userCredential.user.uid,
-        name: userData.name,
-        email: userData.email,
-        role: userData.role
-      })
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
     );
 
-    alert(
-      "Welcome " +
-      userData.name
-    );
+    const ref = doc(db, "users", userCredential.user.uid);
+    const snap = await getDoc(ref);
 
-    window.location.href =
-      "index.html";
+    if (!snap.exists()) {
+      alert("User profile not found!");
+      return;
+    }
+
+    const userData = snap.data();
+
+    localStorage.setItem("currentUser", JSON.stringify({
+      uid: userCredential.user.uid,
+      name: userData.name,
+      email: userData.email,
+      role: userData.role
+    }));
+
+    alert("Welcome " + userData.name);
+
+    window.location.href = "index.html";
 
   } catch (error) {
-
-    alert(
-      "Login failed: " +
-      error.message
-    );
-
+    alert("Login failed: " + error.message);
   }
 
 };
