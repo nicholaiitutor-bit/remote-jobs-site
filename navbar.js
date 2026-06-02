@@ -4,8 +4,8 @@ export function loadNavbar() {
   const navbar = document.getElementById("navbar");
 
   initAuth(() => {
+    if (!navbar) return;
 
-    // GUEST USER
     if (!currentUser) {
       navbar.innerHTML = `
         <a href="index.html">Home</a>
@@ -13,10 +13,7 @@ export function loadNavbar() {
         <a href="login.html">Login</a>
         <a href="signup.html">Sign Up</a>
       `;
-    }
-
-    // EMPLOYER
-    else if (currentUser.role === "employer") {
+    } else if (currentUser.role === "employer") {
       navbar.innerHTML = `
         <a href="index.html">Home</a>
         <a href="jobs.html">Jobs</a>
@@ -24,10 +21,7 @@ export function loadNavbar() {
         <a href="employer-dashboard.html">Dashboard</a>
         <a href="#" id="logout">Logout</a>
       `;
-    }
-
-    // FREELANCER
-    else {
+    } else {
       navbar.innerHTML = `
         <a href="index.html">Home</a>
         <a href="jobs.html">Jobs</a>
