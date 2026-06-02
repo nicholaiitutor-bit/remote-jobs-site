@@ -1,19 +1,58 @@
-/* =========================
-   GLOBAL BASE
-========================= */
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f4f6f9;
-  color: #222;
+/* ======================================================
+   1. DESIGN TOKENS (SYSTEM VARIABLES)
+====================================================== */
+:root {
+  --primary: #14a800;        /* Upwork green */
+  --primary-dark: #0e7a00;
+  --text: #222;
+  --muted: #666;
+  --border: #e6e6e6;
+  --bg: #f4f6f9;
+  --white: #ffffff;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.05);
+  --shadow-md: 0 6px 16px rgba(0,0,0,0.08);
+
+  --font: Arial, Helvetica, sans-serif;
 }
 
-/* =========================
-   TOP NAV (OLJ STYLE)
-========================= */
+/* ======================================================
+   2. GLOBAL RESET
+====================================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ======================================================
+   3. TYPOGRAPHY
+====================================================== */
+h1, h2, h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+p {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ======================================================
+   4. HEADER / NAVBAR (SAAS STYLE TOP BAR)
+====================================================== */
 header {
-  background: #ffffff;
-  border-bottom: 1px solid #e6e6e6;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
   padding: 12px 20px;
   display: flex;
   justify-content: space-between;
@@ -23,59 +62,156 @@ header {
 .logo {
   font-size: 18px;
   font-weight: bold;
-  color: #14a800;
+  color: var(--primary);
 }
 
 nav a {
   margin-left: 15px;
   text-decoration: none;
-  color: #333;
+  color: var(--text);
   font-weight: 600;
   font-size: 14px;
   transition: 0.2s;
 }
 
 nav a:hover {
-  color: #14a800;
+  color: var(--primary);
 }
 
-/* =========================
-   HERO SECTION
-========================= */
+/* ======================================================
+   5. HERO SECTION (MARKETPLACE LANDING STYLE)
+====================================================== */
 .hero {
-  background: #ffffff;
-  padding: 45px 20px;
+  background: var(--white);
+  padding: 50px 20px;
   text-align: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
 }
 
 .hero h1 {
   font-size: 32px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .hero p {
-  color: #666;
   margin-bottom: 20px;
 }
 
-/* SEARCH BOX */
-.search-box {
-  max-width: 700px;
-  margin: auto;
-}
-
-.search-box input {
-  width: 100%;
+/* ======================================================
+   6. SEARCH INPUT
+====================================================== */
+.search-box-input {
+  width: 60%;
+  max-width: 600px;
   padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   font-size: 14px;
+  outline: none;
 }
 
-/* =========================
-   FILTER BAR (OLJ STYLE)
-========================= */
+/* ======================================================
+   7. BUTTON SYSTEM (UI KIT CORE)
+====================================================== */
+.btn {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+}
+
+/* Secondary button */
+.btn-secondary {
+  background: #28a745;
+}
+
+.btn-secondary:hover {
+  background: #1e7e34;
+}
+
+/* ======================================================
+   8. LAYOUT SYSTEM
+====================================================== */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+.jobs {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* ======================================================
+   9. JOB GRID (UPWORK STYLE)
+====================================================== */
+#jobList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+/* ======================================================
+   10. JOB CARD (CORE COMPONENT)
+====================================================== */
+.job-card {
+  background: var(--white);
+  padding: 15px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: 0.2s ease;
+}
+
+.job-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+.job-card h3 {
+  font-size: 16px;
+  color: var(--primary);
+}
+
+.job-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 6px 0;
+}
+
+/* ======================================================
+   11. FORMS
+====================================================== */
+input, select, textarea {
+  font-family: var(--font);
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  outline: none;
+}
+
+/* ======================================================
+   12. FILTER BAR
+====================================================== */
 .filters {
   max-width: 1100px;
   margin: 15px auto;
@@ -84,114 +220,36 @@ nav a:hover {
   gap: 10px;
 }
 
-.filters select {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  font-size: 13px;
-  background: white;
-}
-
-/* =========================
-   JOB LIST CONTAINER
-========================= */
-.jobs {
-  max-width: 1100px;
-  margin: auto;
+/* ======================================================
+   13. FOOTER
+====================================================== */
+footer {
+  text-align: center;
   padding: 20px;
-}
-
-/* GRID STYLE (OLJ + UPWORK MIX) */
-#jobList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 15px;
-}
-
-/* =========================
-   JOB CARD (CORE UI)
-========================= */
-.job-card {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #eee;
-  transition: 0.2s ease;
-}
-
-.job-card:hover {
-  transform: translateY(-3px);
-  border-color: #14a800;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.job-card h3 {
-  margin: 0;
-  font-size: 16px;
-  color: #14a800;
-}
-
-.job-meta {
-  font-size: 12px;
-  color: #666;
-  margin: 6px 0;
-}
-
-.job-card p {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
   font-size: 13px;
-  color: #444;
-  line-height: 1.4;
+  color: var(--muted);
 }
 
-/* =========================
-   BUTTON (UPWORK STYLE)
-========================= */
-.btn {
-  display: inline-block;
-  margin-top: 10px;
-  background: #14a800;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 13px;
-  transition: 0.2s;
-}
-
-.btn:hover {
-  background: #0e7a00;
-}
-
-/* =========================
-   JOB DETAILS PAGE
-========================= */
-.job-card hr {
-  border: none;
-  border-top: 1px solid #eee;
-  margin: 12px 0;
-}
-
-/* =========================
-   INPUTS (GLOBAL)
-========================= */
-input, select, textarea {
-  font-family: inherit;
-  outline: none;
-}
-
-/* =========================
-   RESPONSIVE DESIGN
-========================= */
+/* ======================================================
+   14. RESPONSIVE
+====================================================== */
 @media (max-width: 768px) {
+  .hero h1 {
+    font-size: 24px;
+  }
+
+  .search-box-input {
+    width: 90%;
+  }
+
   .filters {
     flex-direction: column;
   }
 
   nav a {
     font-size: 13px;
-  }
-
-  .hero h1 {
-    font-size: 24px;
   }
 }
