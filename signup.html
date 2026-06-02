@@ -68,19 +68,18 @@ window.signupUser = async function () {
 
   try {
 
-    const userCredential =
-      await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
 
     await setDoc(
       doc(db, "users", userCredential.user.uid),
       {
-        name: name,
-        email: email,
-        role: role,
+        name,
+        email,
+        role,
         createdAt: new Date()
       }
     );
@@ -90,9 +89,7 @@ window.signupUser = async function () {
     window.location.href = "login.html";
 
   } catch (error) {
-
     alert(error.message);
-
   }
 
 };
