@@ -3,32 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Online Jobs</title>
+  <title>Online Jobs Marketplace</title>
 
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-<!-- HEADER (this fixes your styling issue) -->
 <header>
   <h2>Online Jobs</h2>
   <nav id="navbar"></nav>
 </header>
 
-<!-- HERO SECTION -->
+<!-- HERO (Upwork style) -->
 <section class="hero">
-  <h1>Find Remote Jobs Easily</h1>
-  <p>Connect with employers and start working from home</p>
+  <h1>Find Remote Jobs That Match Your Skills</h1>
+  <p>Work from anywhere. Connect with global employers.</p>
 </section>
 
-<!-- MAIN CONTENT -->
+<!-- SEARCH BAR (new Upwork feature) -->
+<section class="jobs">
+  <input id="searchInput" placeholder="Search jobs (e.g. VA, Designer, Developer)" style="width:100%; padding:10px; margin-bottom:15px; border-radius:6px; border:1px solid #ddd;">
+</section>
+
+<!-- JOB LIST -->
 <main class="jobs">
-  <h2>Latest Jobs</h2>
   <div id="jobList"></div>
 </main>
 
-<!-- YOUR AUTH NAV SCRIPT -->
+<!-- AUTH + NAV -->
 <script type="module">
 import { initAuth, currentUser, logout } from "./auth.js";
 
@@ -43,8 +46,7 @@ initAuth(() => {
       <a href="login.html">Login</a>
       <a href="signup.html">Sign Up</a>
     `;
-  } 
-  else if (currentUser.role === "employer") {
+  } else if (currentUser.role === "employer") {
     navbar.innerHTML = `
       <a href="index.html">Home</a>
       <a href="jobs.html">Jobs</a>
@@ -52,8 +54,7 @@ initAuth(() => {
       <a href="employer-dashboard.html">Dashboard</a>
       <a href="#" id="logout">Logout</a>
     `;
-  } 
-  else {
+  } else {
     navbar.innerHTML = `
       <a href="index.html">Home</a>
       <a href="jobs.html">Jobs</a>
@@ -69,6 +70,42 @@ initAuth(() => {
     };
   }
 });
+</script>
+
+<!-- FIREBASE JOB LOADER -->
+<script type="module">
+import { db } from "./firebase.js";
+import {
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const jobList = document.getElementById("jobList");
+
+async function loadJobs() {
+  const snap = await getDocs(collection(db, "jobs"));
+
+  jobList.innerHTML = "";
+
+  snap.forEach(doc => {
+    const job = doc.data();
+
+    jobList.innerHTML += `
+      <div class="job-card">
+        <h3>${job.title}</h3>
+        <div class="job-meta">
+          ${job.company || "Private Company"} • ${job.location || "Remote"}
+        </div>
+        <p style="font-size:13px; color:#444;">
+          ${job.description?.slice(0, 120) || ""}...
+        </p>
+        <a class="btn" href="job.html?id=${doc.id}">View Job</a>
+      </div>
+    `;
+  });
+}
+
+loadJobs();
 </script>
 
 </body>
